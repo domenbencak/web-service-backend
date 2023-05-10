@@ -18,10 +18,11 @@
       <!--<li><a href='/'>Domov</a></li>-->
       <li><a href='/'>Domov</a></li>
       {{#if session.userId}}
+      <li><a href='/deviceData/publish'>Dodaj deviceData</a></li>
+      <li><a href='/deviceData'>List deviceData</a></li>
       <li><a href='/user/profile'>Profil</a></li>
       <li><a href='/user/logout'>Odjava</a></li>
       {{else}}
-      <li><a href='/deviceData/publish'>Dodaj deviceData</a></li>
       <li><a href='/user/login'>Prijava</a></li>
       <li><a href='/user/register'>Registracija</a></li>
       {{/if}}
