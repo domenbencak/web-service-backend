@@ -6,16 +6,17 @@ var userController = require('../controllers/userController.js');
  * GET
  */
 router.get('/', userController.list);
-
-/*
- * GET
- */
+router.get('/register', userController.showRegister);
+router.get('/login', userController.showLogin);
+router.get('/profile', userController.profile);
+router.get('/logout', userController.logout);
 router.get('/:id', userController.show);
 
 /*
  * POST
  */
 router.post('/', userController.create);
+router.post('/login', userController.login);
 
 /*
  * PUT
