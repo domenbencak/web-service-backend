@@ -6,16 +6,14 @@ var deviceDataController = require('../controllers/deviceDataController.js');
  * GET
  */
 router.get('/', deviceDataController.list);
-
-/*
- * GET
- */
+console.log("POG");
+router.get('/publish', deviceDataController.publish);
 router.get('/:id', deviceDataController.show);
 
 /*
  * POST
  */
-router.post('/', deviceDataController.create);
+router.post('/', deviceDataController.createRandom);
 
 /*
  * PUT

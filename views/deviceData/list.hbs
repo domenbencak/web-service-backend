@@ -1,0 +1,21 @@
+<h1>deviceData:</h1>
+{{#each questions}}
+<a href="/questions/{{this._id}}">
+    <h2>{{this.title}}</h2>
+</a>
+<p>{{this.body}}</p>
+<div style="background-color: azure;">{{this.tags}}</div>
+Objavil: <span>{{this.createdBy.username}}</span>
+<p>{{this.createdAt}}</p>
+
+{{#if this.answers.length}}
+<h3>Odgovori:</h3>
+{{#each this.answers}}
+<div style="{{#if isMarked}}background-color: palegreen;{{/if}}">
+    <p>{{this.text}}</p>
+    Objavil: <span>{{this.user.username}}</span>
+    <p>{{this.createdAt}}</p>
+    <hr />
+</div>
+{{/each}}
+{{/if}}

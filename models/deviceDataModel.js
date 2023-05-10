@@ -9,7 +9,7 @@ var deviceDataSchema = new Schema({
 	'gyroscopeY' : Number,
 	'gyroscopeZ' : Number,
 	'latitude' : Number,
-	'longtitude' : Number,
+	'longitude' : Number,
 	'timestamp' : Date
 });
 

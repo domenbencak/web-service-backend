@@ -1,10 +1,27 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>{{title}}</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    {{{body}}}
-  </body>
+
+<head>
+  <title>{{title}}</title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <nav>
+    <ul>
+      <!--<li><a href='/'>Domov</a></li>-->
+      <li><a href='/'>Domov</a></li>
+      {{#if session.userId}}
+      <li><a href='/users/profile'>Profil</a></li>
+      <li><a href='/users/logout'>Odjava</a></li>
+      {{else}}
+      <li><a href='/deviceData/publish'>Dodaj deviceData</a></li>
+      <li><a href='/users/login'>Prijava</a></li>
+      <li><a href='/users/register'>Registracija</a></li>
+      {{/if}}
+    </ul>
+  </nav>
+  {{{body}}}
+</body>
+
 </html>

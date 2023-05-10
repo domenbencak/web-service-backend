@@ -75,6 +75,60 @@ module.exports = {
         });
     },
 
+
+    createRandom: function (req, res) {
+        function getRandomAccelerometerValue() {
+            var min = -2;
+            var max = 2;
+
+            return Math.random() * (max - min) + min;
+        }
+        function getRandomGyroscopeValue() {
+            var min = -2000;
+            var max = 2000;
+
+            return Math.random() * (max - min) + min;
+        }
+        function getRandomLatitude() {
+            var min = -90;
+            var max = 90;
+
+            return Math.random() * (max - min) + min;
+        }
+        function getRandomLongitude() {
+            var min = -180;
+            var max = 180;
+
+            return Math.random() * (max - min) + min;
+        }
+        var deviceData = new DevicedataModel({
+            accelerometerX: getRandomAccelerometerValue(),
+            accelerometerY: getRandomAccelerometerValue(),
+            accelerometerZ: getRandomAccelerometerValue(),
+            gyroscopeX: getRandomGyroscopeValue(),
+            gyroscopeY: getRandomGyroscopeValue(),
+            gyroscopeZ: getRandomGyroscopeValue(),
+            latitude: getRandomLatitude(),
+            longitude: getRandomLongitude(),
+            timestamp: new Date()
+        });
+
+        deviceData
+            .save()
+            .then(savedData => {
+            return res.status(201).json(savedData);
+            })
+            .catch(error => {
+            return res.status(500).json({
+                message: 'Error when creating deviceData',
+                error: error
+            });
+            });
+    },
+
+
+
+
     /**
      * deviceDataController.update()
      */
@@ -134,5 +188,9 @@ module.exports = {
 
             return res.status(204).json();
         });
+    },
+
+    publish: function(req, res){
+        return res.render('deviceData/publish');
     }
 };
