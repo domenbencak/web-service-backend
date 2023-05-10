@@ -10,32 +10,27 @@ module.exports = {
     /**
      * deviceDataController.list()
      */
-    list: function (req, res) {
-        DevicedataModel.find(function (err, deviceDatas) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when getting deviceData.',
-                    error: err
-                });
-            }
-
-            return res.json(deviceDatas);
-        });
+    list: async function (req, res) {
+        try {
+            const deviceDatas = await DevicedataModel.find();
+            return res.render('deviceData/list', { deviceDatas });
+        } catch (err) {
+            return res.status(500).json({
+                message: 'Error when getting deviceData.',
+                error: err
+            });
+        }
     },
+
+
 
     /**
      * deviceDataController.show()
      */
-    show: function (req, res) {
-        var id = req.params.id;
-
-        DevicedataModel.findOne({_id: id}, function (err, deviceData) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when getting deviceData.',
-                    error: err
-                });
-            }
+    show: async function (req, res) {
+        try {
+            var id = req.params.id;
+            const deviceData = await DevicedataModel.findOne({ _id: id });
 
             if (!deviceData) {
                 return res.status(404).json({
@@ -44,7 +39,12 @@ module.exports = {
             }
 
             return res.json(deviceData);
-        });
+        } catch (err) {
+            return res.status(500).json({
+                message: 'Error when getting deviceData.',
+                error: err
+            });
+        }
     },
 
     /**
@@ -116,7 +116,8 @@ module.exports = {
         deviceData
             .save()
             .then(savedData => {
-            return res.status(201).json(savedData);
+                //return res.status(201).json(savedData);
+                return res.redirect('/deviceData');
             })
             .catch(error => {
             return res.status(500).json({

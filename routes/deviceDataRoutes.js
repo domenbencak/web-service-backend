@@ -6,7 +6,6 @@ var deviceDataController = require('../controllers/deviceDataController.js');
  * GET
  */
 router.get('/', deviceDataController.list);
-console.log("POG");
 router.get('/publish', deviceDataController.publish);
 router.get('/:id', deviceDataController.show);
 
