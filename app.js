@@ -73,6 +73,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+port = 8080;
+
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
