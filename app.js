@@ -56,6 +56,16 @@ app.use('/user', userRouter);
 app.use('/deviceData', deviceDataRouter);
 app.use('/carRide', carRideRouter);
 app.use('/carRideRating', carRideRatingRouter);
+app.post('/message', (req, res) => {
+  const message = req.body.message; // Assuming the message is sent in the request body
+
+  // Process the message as needed
+  // ...
+
+  // Send a response back to the Flutter app
+  res.send('Message received');
+});
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -71,12 +81,6 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
-});
-
-port = 8080;
-
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
 });
 
 module.exports = app;
