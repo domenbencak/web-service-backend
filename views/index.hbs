@@ -1,2 +1,56 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
+
+<div id="map"></div>
+
+<script src="https://openlayers.org/en/v6.6.1/build/ol.js"></script>
+<script>
+    // Create a map instance
+    var map = new ol.Map({
+        target: 'map',
+        layers: [
+            new ol.layer.Tile({
+                source: new ol.source.OSM()
+            })
+        ],
+        view: new ol.View({
+            center: ol.proj.fromLonLat([0, 0]),
+            zoom: 2
+        }),
+        controls: ol.control.defaults({ attribution: false })
+    });
+
+    // Get the user's current location
+    if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            // Update the map view with the user's location
+            var userLocation = ol.proj.fromLonLat([position.coords.longitude, position.coords.latitude]);
+            map.getView().setCenter(userLocation);
+            map.getView().setZoom(12);
+
+            // Define the line coordinates
+            var lineCoordinates = [
+                userLocation,
+                ol.proj.fromLonLat([userLocation[0] + 0.01, userLocation[1] + 1.01]),
+                ol.proj.fromLonLat([userLocation[0] + 1.02, userLocation[1] + 0.00]),
+            ];
+
+            // Create a line feature
+            var lineFeature = new ol.Feature({
+                geometry: new ol.geom.LineString(lineCoordinates)
+            });
+
+            // Create a vector source and layer
+            var vectorSource = new ol.source.Vector({
+                features: [lineFeature]
+            });
+
+            var vectorLayer = new ol.layer.Vector({
+                source: vectorSource
+            });
+
+            // Add the vector layer to the map
+            map.addLayer(vectorLayer);
+        });
+    }
+</script>
