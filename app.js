@@ -61,7 +61,7 @@ app.post('/message', (req, res) => {
 
   // Process the message as needed
   // ...
-
+  console.log("Message recieved");
   // Send a response back to the Flutter app
   res.send('Message received');
 });
