@@ -49,7 +49,7 @@ module.exports = {
      */
     create: function (req, res) {
   // Extract the data from the request body
-  let {
+  const {
     accelerometerX,
     accelerometerY,
     accelerometerZ,
@@ -62,18 +62,6 @@ module.exports = {
     user,
     rating
   } = req.body;
-
-  // Cast values to correct types
-  accelerometerX = Array.isArray(accelerometerX) ? accelerometerX : [];
-  accelerometerY = Array.isArray(accelerometerY) ? accelerometerY : [];
-  accelerometerZ = Array.isArray(accelerometerZ) ? accelerometerZ : [];
-  gyroscopeX = Array.isArray(gyroscopeX) ? gyroscopeX : [];
-  gyroscopeY = Array.isArray(gyroscopeY) ? gyroscopeY : [];
-  gyroscopeZ = Array.isArray(gyroscopeZ) ? gyroscopeZ : [];
-  latitude = Number(latitude);
-  longitude = Number(longitude);
-  timestamp = new Date(timestamp);
-  rating = Number(rating);
 
   // Validate data types
   const errors = [];
@@ -95,19 +83,19 @@ module.exports = {
   if (!Array.isArray(gyroscopeZ)) {
     errors.push('gyroscopeZ should be an array');
   }
-  if (isNaN(latitude)) {
+  if (typeof latitude !== 'number') {
     errors.push('latitude should be a number');
   }
-  if (isNaN(longitude)) {
+  if (typeof longitude !== 'number') {
     errors.push('longitude should be a number');
   }
-  if (isNaN(timestamp.getTime())) {
-    errors.push('timestamp should be a valid date');
+  if (!(timestamp instanceof Date)) {
+    errors.push('timestamp should be a Date object');
   }
   if (typeof user !== 'string') {
     errors.push('user should be a string');
   }
-  if (isNaN(rating)) {
+  if (typeof rating !== 'number') {
     errors.push('rating should be a number');
   }
 
@@ -148,6 +136,7 @@ module.exports = {
     res.send('DeviceData created successfully');
   });
 },
+
 
 
 
