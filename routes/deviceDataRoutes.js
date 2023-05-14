@@ -14,7 +14,7 @@ router.get('/:id', deviceDataController.show);
  */
 router.post('/', function(req, res, next) {
   console.log('Received POST request to /deviceData'); // Add this line
-  deviceDataController.create(req, res);
+  deviceDataController.createRandom(req, res);
 });
 
 /*
