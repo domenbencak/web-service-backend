@@ -56,19 +56,6 @@ app.use('/user', userRouter);
 app.use('/deviceData', deviceDataRouter);
 app.use('/carRide', carRideRouter);
 app.use('/carRideRating', carRideRatingRouter);
-app.post('/message', (req, res) => {
-  const jsonData = req.body; // Assuming the JSON data is sent in the request body
-
-  // Process the jsonData as needed
-  // ...
-  console.log(jsonData);
-  
-  // Send a response back to the Flutter app
-  res.send('Message received');
-});
-
-
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

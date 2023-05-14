@@ -12,7 +12,7 @@ router.get('/:id', deviceDataController.show);
 /*
  * POST
  */
-router.post('/', deviceDataController.createRandom);
+router.post('/', deviceDataController.create);
 
 /*
  * PUT

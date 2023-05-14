@@ -48,27 +48,48 @@ module.exports = {
      * deviceDataController.create()
      */
     create: function (req, res) {
-        var deviceData = new DevicedataModel({
-            accelerometerX: req.body.accelerometerX,
-            accelerometerY: req.body.accelerometerY,
-            accelerometerZ: req.body.accelerometerZ,
-            gyroscopeX: req.body.gyroscopeX,
-            gyroscopeY: req.body.gyroscopeY,
-            gyroscopeZ: req.body.gyroscopeZ,
-            latitude: req.body.latitude,
-            longitude: req.body.longitude,
-            timestamp: req.body.timestamp
+        // Extract the data from the request body
+        const {
+            accelerometerX,
+            accelerometerY,
+            accelerometerZ,
+            gyroscopeX,
+            gyroscopeY,
+            gyroscopeZ,
+            latitude,
+            longitude,
+            timestamp,
+            user,
+            rating
+        } = req.body;
+
+        // Create a new instance of the DeviceDataModel
+        const deviceData = new DeviceDataModel({
+            accelerometerX,
+            accelerometerY,
+            accelerometerZ,
+            gyroscopeX,
+            gyroscopeY,
+            gyroscopeZ,
+            latitude,
+            longitude,
+            timestamp,
+            user,
+            rating
         });
 
-        deviceData.save(function (err, deviceData) {
+        // Save the deviceData object to the database
+        deviceData.save(function(err, savedData) {
             if (err) {
-                return res.status(500).json({
-                    message: 'Error when creating deviceData',
-                    error: err
-                });
+            console.error('Error when creating deviceData:', err);
+            return res.status(500).json({
+                message: 'Error when creating deviceData',
+                error: err
+            });
             }
 
-            return res.status(201).json(deviceData);
+            console.log('DeviceData created:', savedData);
+            res.send('DeviceData created successfully');
         });
     },
 
