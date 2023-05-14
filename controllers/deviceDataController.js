@@ -63,6 +63,23 @@ module.exports = {
             rating
         } = req.body;
 
+        // Validate data types
+        if (!Array.isArray(accelerometerX) ||
+            !Array.isArray(accelerometerY) ||
+            !Array.isArray(accelerometerZ) ||
+            !Array.isArray(gyroscopeX) ||
+            !Array.isArray(gyroscopeY) ||
+            !Array.isArray(gyroscopeZ) ||
+            typeof latitude !== 'number' ||
+            typeof longitude !== 'number' ||
+            !(timestamp instanceof Date) ||
+            typeof user !== 'string' ||
+            typeof rating !== 'number') {
+            return res.status(400).json({
+            message: 'Invalid data types in the request body'
+            });
+        }
+
         // Create a new instance of the DeviceDataModel
         const deviceData = new DeviceDataModel({
             accelerometerX,
@@ -84,14 +101,15 @@ module.exports = {
             console.error('Error when creating deviceData:', err);
             return res.status(500).json({
                 message: 'Error when creating deviceData',
-                error: err.message  // Use err.message to get the specific error message
+                error: err
             });
             }
 
             console.log('DeviceData created:', savedData);
             res.send('DeviceData created successfully');
         });
-        },
+    },
+
 
 
     createRandom: function (req, res) {
