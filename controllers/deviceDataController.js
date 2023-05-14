@@ -79,21 +79,20 @@ module.exports = {
   };
 
   // Create a new instance of the DeviceDataModel with the casted data
-  const deviceData = new DeviceDataModel(castedData);
+  var deviceData = new DeviceDataModel(castedData);
 
   // Save the deviceData object to the database
-  deviceData.save(function(err, savedData) {
-    if (err) {
-      console.error('Error when creating deviceData:', err);
-      return res.status(500).json({
-        message: 'Error when creating deviceData',
-        error: err
-      });
-    }
-
-    console.log('DeviceData created:', savedData);
-    res.send('DeviceData created successfully');
-  });
+  deviceData
+            .save()
+            .then(savedData => {
+                return res.redirect('/deviceData');
+            })
+            .catch(error => {
+                return res.status(500).json({
+                    message: 'Error when creating deviceData',
+                    error: error
+                });
+            });
 },
 
 
