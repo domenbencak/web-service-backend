@@ -76,8 +76,8 @@ module.exports = {
             gyroscopeZ,
             latitude,
             longitude,
-            timestamp,
-            user: userId,
+            timestamp: new Date(),
+            user: req.session.userId,
             rating
         });
 
