@@ -1,11 +1,24 @@
 <h1>deviceData:</h1>
 {{#each deviceDatas}}
-<p>Accelerometer X: {{this.accelerometerX}}</p>
-<p>Accelerometer Y: {{this.accelerometerY}}</p>
-<p>Accelerometer Z: {{this.accelerometerZ}}</p>
-<p>Gyroscope X: {{this.gyroscopeX}}</p>
-<p>Gyroscope Y: {{this.gyroscopeY}}</p>
-<p>Gyroscope Z: {{this.gyroscopeZ}}</p>
+<p>Device Data:</p>
+{{#each this.accelerometerX}}
+<p>Accelerometer X: {{this}}</p>
+{{/each}}
+{{#each this.accelerometerY}}
+<p>Accelerometer Y: {{this}}</p>
+{{/each}}
+{{#each this.accelerometerZ}}
+<p>Accelerometer Z: {{this}}</p>
+{{/each}}
+{{#each this.gyroscopeX}}
+<p>Gyroscope X: {{this}}</p>
+{{/each}}
+{{#each this.gyroscopeY}}
+<p>Gyroscope Y: {{this}}</p>
+{{/each}}
+{{#each this.gyroscopeZ}}
+<p>Gyroscope Z: {{this}}</p>
+{{/each}}
 <p>Latitude: {{this.latitude}}</p>
 <p>Longitude: {{this.longitude}}</p>
 <hr />

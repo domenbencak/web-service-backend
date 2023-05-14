@@ -6,7 +6,6 @@ var DevicedataModel = require('../models/deviceDataModel.js');
  * @description :: Server-side logic for managing deviceDatas.
  */
 module.exports = {
-
     /**
      * deviceDataController.list()
      */
@@ -21,8 +20,6 @@ module.exports = {
             });
         }
     },
-
-
 
     /**
      * deviceDataController.show()
@@ -52,15 +49,15 @@ module.exports = {
      */
     create: function (req, res) {
         var deviceData = new DevicedataModel({
-			accelerometerX : req.body.accelerometerX,
-			accelerometerY : req.body.accelerometerY,
-			accelerometerZ : req.body.accelerometerZ,
-			gyroscopeX : req.body.gyroscopeX,
-			gyroscopeY : req.body.gyroscopeY,
-			gyroscopeZ : req.body.gyroscopeZ,
-			latitude : req.body.latitude,
-			longtitude : req.body.longtitude,
-			timestamp : req.body.timestamp
+            accelerometerX: req.body.accelerometerX,
+            accelerometerY: req.body.accelerometerY,
+            accelerometerZ: req.body.accelerometerZ,
+            gyroscopeX: req.body.gyroscopeX,
+            gyroscopeY: req.body.gyroscopeY,
+            gyroscopeZ: req.body.gyroscopeZ,
+            latitude: req.body.latitude,
+            longitude: req.body.longitude,
+            timestamp: req.body.timestamp
         });
 
         deviceData.save(function (err, deviceData) {
@@ -75,59 +72,52 @@ module.exports = {
         });
     },
 
-
     createRandom: function (req, res) {
-        function getRandomAccelerometerValue() {
-            var min = -2;
-            var max = 2;
-
-            return Math.random() * (max - min) + min;
+        function getRandomValues(min, max, count) {
+            if(count == 1) {
+                return Math.random() * (max - min) + min;
+            }
+            var values = [];
+            for (var i = 0; i < count; i++) {
+                var value = Math.random() * (max - min) + min;
+                values.push(value);
+            }
+            return values;
         }
-        function getRandomGyroscopeValue() {
-            var min = -2000;
-            var max = 2000;
 
-            return Math.random() * (max - min) + min;
-        }
-        function getRandomLatitude() {
-            var min = -90;
-            var max = 90;
+        var accelerometerXValues = getRandomValues(-2, 2, 10);
+        var accelerometerYValues = getRandomValues(-2, 2, 10);
+        var accelerometerZValues = getRandomValues(-2, 2, 10);
+        var gyroscopeXValues = getRandomValues(-2000, 2000, 10);
+        var gyroscopeYValues = getRandomValues(-2000, 2000, 10);
+        var gyroscopeZValues = getRandomValues(-2000, 2000, 10);
 
-            return Math.random() * (max - min) + min;
-        }
-        function getRandomLongitude() {
-            var min = -180;
-            var max = 180;
-
-            return Math.random() * (max - min) + min;
-        }
         var deviceData = new DevicedataModel({
-            accelerometerX: getRandomAccelerometerValue(),
-            accelerometerY: getRandomAccelerometerValue(),
-            accelerometerZ: getRandomAccelerometerValue(),
-            gyroscopeX: getRandomGyroscopeValue(),
-            gyroscopeY: getRandomGyroscopeValue(),
-            gyroscopeZ: getRandomGyroscopeValue(),
-            latitude: getRandomLatitude(),
-            longitude: getRandomLongitude(),
-            timestamp: new Date()
+            accelerometerX: accelerometerXValues,
+            accelerometerY: accelerometerYValues,
+            accelerometerZ: accelerometerZValues,
+            gyroscopeX: gyroscopeXValues,
+            gyroscopeY: gyroscopeYValues,
+            gyroscopeZ: gyroscopeZValues,
+            latitude: getRandomValues(-90, 90, 1),
+            longitude: getRandomValues(-180, 180,1),
+            timestamp: new Date(),
+            user: req.session.userId,
+            rating: Math.random(0, 100)
         });
 
         deviceData
             .save()
             .then(savedData => {
-                //return res.status(201).json(savedData);
                 return res.redirect('/deviceData');
             })
             .catch(error => {
-            return res.status(500).json({
-                message: 'Error when creating deviceData',
-                error: error
-            });
+                return res.status(500).json({
+                    message: 'Error when creating deviceData',
+                    error: error
+                });
             });
     },
-
-
 
 
     /**
@@ -136,7 +126,7 @@ module.exports = {
     update: function (req, res) {
         var id = req.params.id;
 
-        DevicedataModel.findOne({_id: id}, function (err, deviceData) {
+        DevicedataModel.findOne({ _id: id }, function (err, deviceData) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting deviceData',
@@ -150,16 +140,16 @@ module.exports = {
                 });
             }
 
-            deviceData.accelerometerX = req.body.accelerometerX ? req.body.accelerometerX : deviceData.accelerometerX;
-			deviceData.accelerometerY = req.body.accelerometerY ? req.body.accelerometerY : deviceData.accelerometerY;
-			deviceData.accelerometerZ = req.body.accelerometerZ ? req.body.accelerometerZ : deviceData.accelerometerZ;
-			deviceData.gyroscopeX = req.body.gyroscopeX ? req.body.gyroscopeX : deviceData.gyroscopeX;
-			deviceData.gyroscopeY = req.body.gyroscopeY ? req.body.gyroscopeY : deviceData.gyroscopeY;
-			deviceData.gyroscopeZ = req.body.gyroscopeZ ? req.body.gyroscopeZ : deviceData.gyroscopeZ;
-			deviceData.latitude = req.body.latitude ? req.body.latitude : deviceData.latitude;
-			deviceData.longtitude = req.body.longtitude ? req.body.longtitude : deviceData.longtitude;
-			deviceData.timestamp = req.body.timestamp ? req.body.timestamp : deviceData.timestamp;
-			
+            deviceData.accelerometerX = req.body.accelerometerX || deviceData.accelerometerX;
+            deviceData.accelerometerY = req.body.accelerometerY || deviceData.accelerometerY;
+            deviceData.accelerometerZ = req.body.accelerometerZ || deviceData.accelerometerZ;
+            deviceData.gyroscopeX = req.body.gyroscopeX || deviceData.gyroscopeX;
+            deviceData.gyroscopeY = req.body.gyroscopeY || deviceData.gyroscopeY;
+            deviceData.gyroscopeZ = req.body.gyroscopeZ || deviceData.gyroscopeZ;
+            deviceData.latitude = req.body.latitude || deviceData.latitude;
+            deviceData.longitude = req.body.longitude || deviceData.longitude;
+            deviceData.timestamp = req.body.timestamp || deviceData.timestamp;
+
             deviceData.save(function (err, deviceData) {
                 if (err) {
                     return res.status(500).json({
@@ -191,7 +181,7 @@ module.exports = {
         });
     },
 
-    publish: function(req, res){
+    publish: function (req, res) {
         return res.render('deviceData/publish');
     }
 };
