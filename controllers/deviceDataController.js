@@ -48,94 +48,54 @@ module.exports = {
      * deviceDataController.create()
      */
     create: function (req, res) {
-  // Extract the data from the request body
-  const {
-    accelerometerX,
-    accelerometerY,
-    accelerometerZ,
-    gyroscopeX,
-    gyroscopeY,
-    gyroscopeZ,
-    latitude,
-    longitude,
-    timestamp,
-    user,
-    rating
-  } = req.body;
+        // Extract the data from the request body
+        const {
+            accelerometerX,
+            accelerometerY,
+            accelerometerZ,
+            gyroscopeX,
+            gyroscopeY,
+            gyroscopeZ,
+            latitude,
+            longitude,
+            timestamp,
+            user,
+            rating
+        } = req.body;
 
-  // Validate data types
-  const errors = [];
-  if (!Array.isArray(accelerometerX)) {
-    errors.push('accelerometerX should be an array');
-  }
-  if (!Array.isArray(accelerometerY)) {
-    errors.push('accelerometerY should be an array');
-  }
-  if (!Array.isArray(accelerometerZ)) {
-    errors.push('accelerometerZ should be an array');
-  }
-  if (!Array.isArray(gyroscopeX)) {
-    errors.push('gyroscopeX should be an array');
-  }
-  if (!Array.isArray(gyroscopeY)) {
-    errors.push('gyroscopeY should be an array');
-  }
-  if (!Array.isArray(gyroscopeZ)) {
-    errors.push('gyroscopeZ should be an array');
-  }
-  if (typeof latitude !== 'number') {
-    errors.push('latitude should be a number');
-  }
-  if (typeof longitude !== 'number') {
-    errors.push('longitude should be a number');
-  }
-  if (!(timestamp instanceof Date)) {
-    errors.push('timestamp should be a Date object');
-  }
-  if (typeof user !== 'string') {
-    errors.push('user should be a string');
-  }
-  if (typeof rating !== 'number') {
-    errors.push('rating should be a number');
-  }
+        // Convert user ID to ObjectId if necessary
+        const userId = typeof user === 'string' ? mongoose.Types.ObjectId(user) : user;
 
-  // Check if there are any validation errors
-  if (errors.length > 0) {
-    return res.status(400).json({
-      message: 'Invalid data types in the request body',
-      errors: errors
-    });
-  }
+        // Create a new instance of the DeviceDataModel with the converted user ID
+        const deviceData = new DeviceDataModel({
+            accelerometerX,
+            accelerometerY,
+            accelerometerZ,
+            gyroscopeX,
+            gyroscopeY,
+            gyroscopeZ,
+            latitude,
+            longitude,
+            timestamp,
+            user: userId,
+            rating
+        });
 
-  // Create a new instance of the DeviceDataModel
-  const deviceData = new DeviceDataModel({
-    accelerometerX,
-    accelerometerY,
-    accelerometerZ,
-    gyroscopeX,
-    gyroscopeY,
-    gyroscopeZ,
-    latitude,
-    longitude,
-    timestamp,
-    user,
-    rating
-  });
 
-  // Save the deviceData object to the database
-  deviceData.save(function(err, savedData) {
-    if (err) {
-      console.error('Error when creating deviceData:', err);
-      return res.status(500).json({
-        message: 'Error when creating deviceData',
-        error: err
-      });
-    }
+        // Save the deviceData object to the database
+        deviceData.save(function(err, savedData) {
+            if (err) {
+            console.error('Error when creating deviceData:', err);
+            return res.status(500).json({
+                message: 'Error when creating deviceData',
+                error: err
+            });
+            }
 
-    console.log('DeviceData created:', savedData);
-    res.send('DeviceData created successfully');
-  });
-},
+            console.log('DeviceData created:', savedData);
+            res.send('DeviceData created successfully');
+        });
+        },
 
 
 
