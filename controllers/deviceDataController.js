@@ -11,7 +11,7 @@ module.exports = {
      */
     list: async function (req, res) {
         try {
-            const deviceDatas = await DevicedataModel.find();
+            const deviceDatas = await DevicedataModel.find().populate('user');
             return res.render('deviceData/list', { deviceDatas });
         } catch (err) {
             return res.status(500).json({
@@ -27,7 +27,7 @@ module.exports = {
     show: async function (req, res) {
         try {
             var id = req.params.id;
-            const deviceData = await DevicedataModel.findOne({ _id: id });
+            const deviceData = await DevicedataModel.findOne({ _id: id }).populate('user');
 
             if (!deviceData) {
                 return res.status(404).json({
