@@ -48,106 +48,107 @@ module.exports = {
      * deviceDataController.create()
      */
     create: function (req, res) {
-        // Extract the data from the request body
-        let {
-            accelerometerX,
-            accelerometerY,
-            accelerometerZ,
-            gyroscopeX,
-            gyroscopeY,
-            gyroscopeZ,
-            latitude,
-            longitude,
-            timestamp,
-            user,
-            rating
-        } = req.body;
+  // Extract the data from the request body
+  let {
+    accelerometerX,
+    accelerometerY,
+    accelerometerZ,
+    gyroscopeX,
+    gyroscopeY,
+    gyroscopeZ,
+    latitude,
+    longitude,
+    timestamp,
+    user,
+    rating
+  } = req.body;
 
-        // Cast values to correct types
-        accelerometerX = Array.isArray(accelerometerX) ? accelerometerX : [];
-        accelerometerY = Array.isArray(accelerometerY) ? accelerometerY : [];
-        accelerometerZ = Array.isArray(accelerometerZ) ? accelerometerZ : [];
-        gyroscopeX = Array.isArray(gyroscopeX) ? gyroscopeX : [];
-        gyroscopeY = Array.isArray(gyroscopeY) ? gyroscopeY : [];
-        gyroscopeZ = Array.isArray(gyroscopeZ) ? gyroscopeZ : [];
-        latitude = Number(latitude);
-        longitude = Number(longitude);
-        timestamp = new Date(timestamp);
-        rating = Number(rating);
+  // Cast values to correct types
+  accelerometerX = Array.isArray(accelerometerX) ? accelerometerX : [];
+  accelerometerY = Array.isArray(accelerometerY) ? accelerometerY : [];
+  accelerometerZ = Array.isArray(accelerometerZ) ? accelerometerZ : [];
+  gyroscopeX = Array.isArray(gyroscopeX) ? gyroscopeX : [];
+  gyroscopeY = Array.isArray(gyroscopeY) ? gyroscopeY : [];
+  gyroscopeZ = Array.isArray(gyroscopeZ) ? gyroscopeZ : [];
+  latitude = Number(latitude);
+  longitude = Number(longitude);
+  timestamp = new Date(timestamp);
+  rating = Number(rating);
 
-        // Validate data types
-        const errors = [];
-        if (!Array.isArray(accelerometerX)) {
-            errors.push('accelerometerX should be an array');
-        }
-        if (!Array.isArray(accelerometerY)) {
-            errors.push('accelerometerY should be an array');
-        }
-        if (!Array.isArray(accelerometerZ)) {
-            errors.push('accelerometerZ should be an array');
-        }
-        if (!Array.isArray(gyroscopeX)) {
-            errors.push('gyroscopeX should be an array');
-        }
-        if (!Array.isArray(gyroscopeY)) {
-            errors.push('gyroscopeY should be an array');
-        }
-        if (!Array.isArray(gyroscopeZ)) {
-            errors.push('gyroscopeZ should be an array');
-        }
-        if (isNaN(latitude)) {
-            errors.push('latitude should be a number');
-        }
-        if (isNaN(longitude)) {
-            errors.push('longitude should be a number');
-        }
-        if (isNaN(timestamp.getTime())) {
-            errors.push('timestamp should be a valid date');
-        }
-        if (typeof user !== 'string') {
-            errors.push('user should be a string');
-        }
-        if (isNaN(rating)) {
-            errors.push('rating should be a number');
-        }
+  // Validate data types
+  const errors = [];
+  if (!Array.isArray(accelerometerX)) {
+    errors.push('accelerometerX should be an array');
+  }
+  if (!Array.isArray(accelerometerY)) {
+    errors.push('accelerometerY should be an array');
+  }
+  if (!Array.isArray(accelerometerZ)) {
+    errors.push('accelerometerZ should be an array');
+  }
+  if (!Array.isArray(gyroscopeX)) {
+    errors.push('gyroscopeX should be an array');
+  }
+  if (!Array.isArray(gyroscopeY)) {
+    errors.push('gyroscopeY should be an array');
+  }
+  if (!Array.isArray(gyroscopeZ)) {
+    errors.push('gyroscopeZ should be an array');
+  }
+  if (isNaN(latitude)) {
+    errors.push('latitude should be a number');
+  }
+  if (isNaN(longitude)) {
+    errors.push('longitude should be a number');
+  }
+  if (isNaN(timestamp.getTime())) {
+    errors.push('timestamp should be a valid date');
+  }
+  if (typeof user !== 'string') {
+    errors.push('user should be a string');
+  }
+  if (isNaN(rating)) {
+    errors.push('rating should be a number');
+  }
 
-        // Check if there are any validation errors
-        if (errors.length > 0) {
-            return res.status(400).json({
-            message: 'Invalid data types in the request body',
-            errors: errors
-            });
-        }
+  // Check if there are any validation errors
+  if (errors.length > 0) {
+    return res.status(400).json({
+      message: 'Invalid data types in the request body',
+      errors: errors
+    });
+  }
 
-        // Create a new instance of the DeviceDataModel
-        const deviceData = new DeviceDataModel({
-            accelerometerX,
-            accelerometerY,
-            accelerometerZ,
-            gyroscopeX,
-            gyroscopeY,
-            gyroscopeZ,
-            latitude,
-            longitude,
-            timestamp,
-            user,
-            rating
-        });
+  // Create a new instance of the DeviceDataModel
+  const deviceData = new DeviceDataModel({
+    accelerometerX,
+    accelerometerY,
+    accelerometerZ,
+    gyroscopeX,
+    gyroscopeY,
+    gyroscopeZ,
+    latitude,
+    longitude,
+    timestamp,
+    user,
+    rating
+  });
 
-        // Save the deviceData object to the database
-        deviceData.save(function(err, savedData) {
-            if (err) {
-            console.error('Error when creating deviceData:', err);
-            return res.status(500).json({
-                message: 'Error when creating deviceData',
-                error: err
-            });
-            }
+  // Save the deviceData object to the database
+  deviceData.save(function(err, savedData) {
+    if (err) {
+      console.error('Error when creating deviceData:', err);
+      return res.status(500).json({
+        message: 'Error when creating deviceData',
+        error: err
+      });
+    }
 
-            console.log('DeviceData created:', savedData);
-            res.send('DeviceData created successfully');
-        });
-    },
+    console.log('DeviceData created:', savedData);
+    res.send('DeviceData created successfully');
+  });
+},
+
 
 
     createRandom: function (req, res) {
