@@ -47,56 +47,54 @@ module.exports = {
     /**
      * deviceDataController.create()
      */
-    create: function (req, res) {
-        // Extract the data from the request body
-        console.log(req.body);
-        const {
-            accelerometerX,
-            accelerometerY,
-            accelerometerZ,
-            gyroscopeX,
-            gyroscopeY,
-            gyroscopeZ,
-            latitude,
-            longitude,
-            timestamp,
-            user,
-            rating
-        } = req.body;
+ create: function (req, res) {
+  // Extract the data from the request body
+  const {
+    accelerometerX,
+    accelerometerY,
+    accelerometerZ,
+    gyroscopeX,
+    gyroscopeY,
+    gyroscopeZ,
+    latitude,
+    longitude,
+    timestamp,
+    user,
+    rating
+  } = req.body;
 
-        // Convert user ID to ObjectId if necessary
-        const userId = typeof user === 'string' ? mongoose.Types.ObjectId(user) : user;
+  const castedData = {
+    accelerometerX: accelerometerX.map(Number),
+    accelerometerY: accelerometerY.map(Number),
+    accelerometerZ: accelerometerZ.map(Number),
+    gyroscopeX: gyroscopeX.map(Number),
+    gyroscopeY: gyroscopeY.map(Number),
+    gyroscopeZ: gyroscopeZ.map(Number),
+    latitude: Number(latitude),
+    longitude: Number(longitude),
+    timestamp: new Date(timestamp),
+    user: mongoose.Types.ObjectId(user),
+    rating: Number(rating)
+  };
 
-        // Create a new instance of the DeviceDataModel with the converted user ID
-        const deviceData = new DeviceDataModel({
-            accelerometerX,
-            accelerometerY,
-            accelerometerZ,
-            gyroscopeX,
-            gyroscopeY,
-            gyroscopeZ,
-            latitude,
-            longitude,
-            timestamp: new Date(),
-            user: req.session.userId,
-            rating
-        });
+  // Create a new instance of the DeviceDataModel with the casted data
+  const deviceData = new DeviceDataModel(castedData);
 
+  // Save the deviceData object to the database
+  deviceData.save(function(err, savedData) {
+    if (err) {
+      console.error('Error when creating deviceData:', err);
+      return res.status(500).json({
+        message: 'Error when creating deviceData',
+        error: err
+      });
+    }
 
-        // Save the deviceData object to the database
-        deviceData.save(function(err, savedData) {
-            if (err) {
-            console.error('Error when creating deviceData:', err);
-            return res.status(500).json({
-                message: 'Error when creating deviceData',
-                error: err
-            });
-            }
+    console.log('DeviceData created:', savedData);
+    res.send('DeviceData created successfully');
+  });
+},
 
-            console.log('DeviceData created:', savedData);
-            res.send('DeviceData created successfully');
-        });
-        },
 
 
 
