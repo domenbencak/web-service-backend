@@ -84,14 +84,15 @@ module.exports = {
             console.error('Error when creating deviceData:', err);
             return res.status(500).json({
                 message: 'Error when creating deviceData',
-                error: err
+                error: err.message  // Use err.message to get the specific error message
             });
             }
 
             console.log('DeviceData created:', savedData);
             res.send('DeviceData created successfully');
         });
-    },
+        },
+
 
     createRandom: function (req, res) {
         function getRandomValues(min, max, count) {
