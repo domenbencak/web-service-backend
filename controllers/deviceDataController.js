@@ -49,6 +49,7 @@ module.exports = {
      */
     create: function (req, res) {
         // Extract the data from the request body
+        console.log(req.body);
         const {
             accelerometerX,
             accelerometerY,
