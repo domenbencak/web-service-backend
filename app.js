@@ -61,12 +61,12 @@ app.post('/message', (req, res) => {
 
   // Process the jsonData as needed
   // ...
-  const parsedData = JSON.parse(jsonData);
-  console.log(parsedData);
+  console.log(jsonData);
   
   // Send a response back to the Flutter app
   res.send('Message received');
 });
+
 
 
 
