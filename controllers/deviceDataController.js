@@ -85,12 +85,12 @@ module.exports = {
             return values;
         }
 
-        var accelerometerXValues = getRandomValues(-2, 2, 10);
-        var accelerometerYValues = getRandomValues(-2, 2, 10);
-        var accelerometerZValues = getRandomValues(-2, 2, 10);
-        var gyroscopeXValues = getRandomValues(-2000, 2000, 10);
-        var gyroscopeYValues = getRandomValues(-2000, 2000, 10);
-        var gyroscopeZValues = getRandomValues(-2000, 2000, 10);
+        var accelerometerXValues = getRandomValues(-16, 16, 100);
+        var accelerometerYValues = getRandomValues(-16, 16, 100);
+        var accelerometerZValues = getRandomValues(-16, 16, 100);
+        var gyroscopeXValues = getRandomValues(-50, 50, 100);
+        var gyroscopeYValues = getRandomValues(-50, 50, 100);
+        var gyroscopeZValues = getRandomValues(-50, 50, 100);
 
         var deviceData = new DevicedataModel({
             accelerometerX: accelerometerXValues,
