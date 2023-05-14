@@ -49,51 +49,57 @@ module.exports = {
      * deviceDataController.create()
      */
  create: function (req, res) {
-  // Extract the data from the request body
-  const {
-    accelerometerX,
-    accelerometerY,
-    accelerometerZ,
-    gyroscopeX,
-    gyroscopeY,
-    gyroscopeZ,
-    latitude,
-    longitude,
-    timestamp,
-    user,
-    rating
-  } = req.body;
+    // TODO - implement adding the recieved data to database. Didn't work with code below:
+    /*
+    // Extract the data from the request body
+    const {
+        accelerometerX,
+        accelerometerY,
+        accelerometerZ,
+        gyroscopeX,
+        gyroscopeY,
+        gyroscopeZ,
+        latitude,
+        longitude,
+        timestamp,
+        user,
+        rating
+    } = req.body;
 
-  const castedData = {
-    accelerometerX: accelerometerX.map(Number),
-    accelerometerY: accelerometerY.map(Number),
-    accelerometerZ: accelerometerZ.map(Number),
-    gyroscopeX: gyroscopeX.map(Number),
-    gyroscopeY: gyroscopeY.map(Number),
-    gyroscopeZ: gyroscopeZ.map(Number),
-    latitude: Number(latitude),
-    longitude: Number(longitude),
-    timestamp: new Date(),
-    user: req.session.userId,
-    rating: Number(rating)
-  };
+    const castedData = {
+        accelerometerX: accelerometerX.map(Number),
+        accelerometerY: accelerometerY.map(Number),
+        accelerometerZ: accelerometerZ.map(Number),
+        gyroscopeX: gyroscopeX.map(Number),
+        gyroscopeY: gyroscopeY.map(Number),
+        gyroscopeZ: gyroscopeZ.map(Number),
+        latitude: Number(latitude),
+        longitude: Number(longitude),
+        timestamp: new Date(),
+        user: req.user.userId,
+        rating: Number(rating)
+    };
 
-  // Create a new instance of the DeviceDataModel with the casted data
-  var deviceData = new DeviceDataModel(castedData);
+    // Create a new instance of the DeviceDataModel with the casted data
+    const deviceData = new DeviceDataModel(castedData);
 
-  // Save the deviceData object to the database
-  deviceData
-            .save()
-            .then(savedData => {
-                return res.redirect('/deviceData');
-            })
-            .catch(error => {
-                return res.status(500).json({
-                    message: 'Error when creating deviceData',
-                    error: error
-                });
-            });
-},
+    // Save the deviceData object to the database
+    deviceData.save(function(err, savedData) {
+        if (err) {
+        console.error('Error when creating deviceData:', err);
+        return res.status(500).json({
+            message: 'Error when creating deviceData',
+            error: err
+        });
+        }
+
+        console.log('DeviceData created:', savedData);
+        res.send('DeviceData created successfully');
+    });
+    */
+    console.log(req.body);
+    res.send('Message recieved successfully');
+    },
 
 
     createRandom: function (req, res) {
