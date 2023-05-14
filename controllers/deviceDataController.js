@@ -1,3 +1,4 @@
+const session = require('express-session');
 var DevicedataModel = require('../models/deviceDataModel.js');
 
 /**
@@ -72,8 +73,8 @@ module.exports = {
     gyroscopeZ: gyroscopeZ.map(Number),
     latitude: Number(latitude),
     longitude: Number(longitude),
-    timestamp: new Date(timestamp),
-    user: mongoose.Types.ObjectId(user),
+    timestamp: new Date(),
+    user: req.session.userId,
     rating: Number(rating)
   };
 
@@ -94,9 +95,6 @@ module.exports = {
     res.send('DeviceData created successfully');
   });
 },
-
-
-
 
 
     createRandom: function (req, res) {
