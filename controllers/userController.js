@@ -149,17 +149,28 @@ module.exports = {
           });
     },
 
-    loginMobile: function(req, res, next){
+    loginMobile: function(req, res, next) {
         UserModel.authenticate(req.body.username, req.body.password)
-        .then(function(user) {
+            .then(function(user) {
             // Authentication successful
-            res.status(200).json({ message: 'Login successful' });
-          })
-          .catch(function(err) {
+            res.status(200).json({
+                message: 'Login successful',
+                user: {
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                faceImagePath: user.faceImagePath,
+                faceFeaturesPath: user.faceFeaturesPath,
+                // Include other user data fields as needed
+                },
+            });
+            })
+            .catch(function(err) {
             // Authentication failed
             res.status(401).json({ message: 'Wrong username or password' });
-    });
+            });
     },
+
 
     profile: function(req, res,next){
         UserModel.findById(req.session.userId)
