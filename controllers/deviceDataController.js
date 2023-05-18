@@ -58,7 +58,7 @@ module.exports = {
         gyroscopeZ: req.body.gyroscopeZ,
         latitude: req.body.latitude,
         longitude: req.body.longitude,
-        timestamp: new Date(),
+        timestamp: req.body.timestamp,
         user: req.session.userId,
         rating: req.body.rating
     });
@@ -66,7 +66,8 @@ module.exports = {
     deviceData
         .save()
         .then(savedData => {
-            return res.send('Received successfully');
+            console.log(req.body.rating, req.body.user);
+            return res.send('Message received successfully');
         })
         .catch(error => {
             return res.status(500).json({
