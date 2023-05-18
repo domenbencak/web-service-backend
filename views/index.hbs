@@ -24,7 +24,7 @@
     if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(function (position) {
             // Update the map view with the user's location
-            var userLocation = ol.proj.fromLonLat([position.coords.longitude, position.coords.latitude]);
+            var userLocation = ol.proj.fromLonLat([position.coords.longitude, position.coords.latitude]) ?? ol.proj.fromLonLat(46.55947, 15.63293);
             map.getView().setCenter(userLocation);
             map.getView().setZoom(12);
 

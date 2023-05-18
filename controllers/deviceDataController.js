@@ -66,7 +66,7 @@ module.exports = {
     deviceData
         .save()
         .then(savedData => {
-            console.log(req.body.rating, req.body.user);
+            console.log("rating: ", req.body.rating,"user_id: ", req.body.user);
             return res.send('Message received successfully');
         })
         .catch(error => {
