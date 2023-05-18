@@ -149,6 +149,18 @@ module.exports = {
           });
     },
 
+    loginMobile: function(req, res, next){
+        UserModel.authenticate(req.body.username, req.body.password)
+        .then(function(user) {
+            // Authentication successful
+            res.status(200).json({ message: 'Login successful' });
+          })
+          .catch(function(err) {
+            // Authentication failed
+            res.status(401).json({ message: 'Wrong username or password' });
+    });
+    },
+
     profile: function(req, res,next){
         UserModel.findById(req.session.userId)
         .exec()
