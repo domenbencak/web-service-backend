@@ -48,89 +48,34 @@ module.exports = {
     /**
      * deviceDataController.create()
      */
- create: function (req, res) {
-    // TODO - implement adding the recieved data to database. Didn't work with code below:
-    
-    // Extract the data from the request body
-
-    function getRandomValues(min, max, count) {
-            if(count == 1) {
-                return Math.random() * (max - min) + min;
-            }
-            var values = [];
-            for (var i = 0; i < count; i++) {
-                var value = Math.random() * (max - min) + min;
-                values.push(value);
-            }
-            return values;
-        }
-
-        var accelerometerXValues = getRandomValues(-16, 16, 100);
-        var accelerometerYValues = getRandomValues(-16, 16, 100);
-        var accelerometerZValues = getRandomValues(-16, 16, 100);
-        var gyroscopeXValues = getRandomValues(-50, 50, 100);
-        var gyroscopeYValues = getRandomValues(-50, 50, 100);
-        var gyroscopeZValues = getRandomValues(-50, 50, 100);
-    const {
-        accelerometerX,
-        accelerometerY,
-        accelerometerZ,
-        gyroscopeX,
-        gyroscopeY,
-        gyroscopeZ,
-        latitude,
-        longitude,
-        timestamp,
-        user,
-        rating
-    } = req.body;
-
-    const castedData = {
-        accelerometerX: accelerometerXValues,
-            accelerometerY: accelerometerYValues,
-            accelerometerZ: accelerometerZValues,
-            gyroscopeX: gyroscopeXValues,
-            gyroscopeY: gyroscopeYValues,
-            gyroscopeZ: gyroscopeZValues,
-        latitude: Number(latitude),
-        longitude: Number(longitude),
+    create: function (req, res) {
+    var deviceData = new DevicedataModel({
+        accelerometerX: req.body.accelerometerX,
+        accelerometerY: req.body.accelerometerY,
+        accelerometerZ: req.body.accelerometerZ,
+        gyroscopeX: req.body.gyroscopeX,
+        gyroscopeY: req.body.gyroscopeY,
+        gyroscopeZ: req.body.gyroscopeZ,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
         timestamp: new Date(),
-        user: req.user.userId,
-        rating: Number(rating)
-    };
-
-    // Create a new instance of the DeviceDataModel with the casted data
-    const deviceData = new DeviceDataModel(castedData);
-
-    // Save the deviceData object to the database
-    /*deviceData.save(function(err, savedData) {
-        if (err) {
-        console.error('Error when creating deviceData:', err);
-        return res.status(500).json({
-            message: 'Error when creating deviceData',
-            error: err
-        });
-        }
-
-        console.log('DeviceData created:', savedData);
-        res.send('DeviceData created successfully');
-    });*/
+        user: req.session.userId,
+        rating: req.body.rating
+    });
 
     deviceData
-            .save()
-            .then(savedData => {
-        res.send('DeviceData created successfully');
-            })
-            .catch(error => {
-                return res.status(500).json({
-                    message: 'Error when creating deviceData',
-                    error: error
-                });
+        .save()
+        .then(savedData => {
+            return res.send('Received successfully');
+        })
+        .catch(error => {
+            return res.status(500).json({
+                message: 'Error when creating deviceData',
+                error: error
             });
-    
-    console.log(req.body);
-    res.send('Message recieved successfully');
-    },
+        });
+},
+
 
 
     createRandom: function (req, res) {
