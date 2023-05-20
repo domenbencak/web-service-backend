@@ -154,15 +154,15 @@ module.exports = {
             .then(function(user) {
             // Authentication successful
             res.status(200).json({
-            "message": "Login successful",
-            "user": {
-                "_id": user._id,
-                "username": user.username,
-                "email": user.email,
-                "faceImagePath": user.faceImagePath,
-                "faceFeaturesPath": user.faceFeaturesPath
+                message: 'Login successful',
+                user: {
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+                faceImagePath: user.faceImagePath,
+                faceFeaturesPath: user.faceFeaturesPath,
                 // Include other user data fields as needed
-            }
+                },
             });
             })
             .catch(function(err) {
