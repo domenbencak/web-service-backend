@@ -9,7 +9,8 @@ var carRideSchema = new Schema({
 	'deviceData' : [{
 		type: Schema.Types.ObjectId,
 	 	ref: 'deviceData'
-	}]
+	}],
+	'dateOfRide' : { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('carRide', carRideSchema);

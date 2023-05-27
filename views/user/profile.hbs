@@ -1,7 +1,43 @@
+
 <h1>Profil uporabnika</h1>
 <h2>Ime: </h2>
 <p>{{user.username}}</p>
 <h2>Mail:</h2>
 <p>{{user.email}}</p>
+
+<h2>Your Car Rides:</h2>
+{{#if carRides.length}}
+  <table class="carRides-table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Device Data Length</th>
+        <th>Date</th>
+        <!-- Add table headers for other car ride properties as needed -->
+      </tr>
+    </thead>
+    <tbody>
+      {{#each carRides}}
+        <tr>
+          <td>{{ this._id }}</td>
+          <td>{{ this.deviceData.length }} <form action="/carRide/{{this._id}}?_method=PUT" method="POST">
+            <div>
+                <button type="submit" class="btn btn-primary">Dodaj podatke</button>
+            </div>
+            </form> </td>
+          <td>{{ this.dateOfRide }}</td>
+          <!-- Display other car ride properties as needed -->
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+{{else}}
+  <p class="no-carRides">No car rides available yet.</p>
+  <!-- Creates a new carRide to which you will later be able to add random data (for testing purposes) -->
+  <form action="/carRide" method="POST" class="carRide-button">
+    <button>Start carRide</button>
+  </form>
+{{/if}}
+
 
 <br><a type="button" href="logout">Odjava </a>

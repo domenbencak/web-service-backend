@@ -1,4 +1,5 @@
 var UserModel = require('../models/userModel.js');
+var CarRideController = require('../controllers/carRideController.js');
 
 /**
  * userController.js
@@ -181,7 +182,14 @@ module.exports = {
             err.status = 400;
             return next(err);
         } else {
-            res.render('user/profile', { user: user });
+            CarRideController.list()
+                .then(function(carRides) {
+                    res.render('user/profile', { user: user, carRides: carRides });
+                })
+                .catch(function(err) {
+                    return next(err);
+                })
+            
             /*getQuestionsByUser(req.session.userId)
             .then(function(questions){
                 return res.render('user/profile', { user: user, questions: questions });

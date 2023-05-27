@@ -13,3 +13,28 @@ a {
   width: 100%;
   /* Adjust the width as per your requirement */
 }
+
+.carRides-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.carRides-table th,
+.carRides-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.carRides-table th {
+  background-color: #f2f2f2;
+}
+
+.no-carRides {
+  margin-top: 20px;
+  font-style: italic;
+}
+
+.carRide-button {
+  margin-top: 20px;
+}

@@ -1,0 +1,32 @@
+<h1>deviceData:</h1>
+
+<form action="/carRide/" method="POST">
+    <div class="tp">
+        <button type="submit" class="btn btn-primary">Zacni novi carRide</button>
+    </div>
+</form>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">User</th>
+      <th scope="col">Num of deviceData entries</th>
+    </tr>
+  </thead>
+  {{#each carRides}}
+  <tbody>
+    <tr>
+        <th scope="row">{{@index}}</th>
+        <td>{{this.user}}</td>
+        <td>{{this.deviceData.length}}</td>
+        <td><form action="/carRide/{{this._id}}?_method=PUT" method="POST">
+            <div class="tp">
+                <button type="submit" class="btn btn-primary">Dodaj nakljucne podatke</button>
+            </div>
+            </form>
+        </td>
+    </tr>
+  </tbody>
+  {{/each}}
+</table>

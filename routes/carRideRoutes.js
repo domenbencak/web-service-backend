@@ -2,6 +2,10 @@ var express = require('express');
 var router = express.Router();
 var carRideController = require('../controllers/carRideController.js');
 
+// Overrides the method for the sent request to the correct one
+const methodOverride = require('method-override');
+router.use(methodOverride('_method'));
+
 /*
  * GET
  */
