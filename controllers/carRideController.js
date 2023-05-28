@@ -1,5 +1,6 @@
 var carRideModel = require('../models/carRideModel.js');
 var deviceDataController = require('../controllers/deviceDataController.js');
+const deviceDataModel = require('../models/deviceDataModel.js');
 
 
 /**
@@ -53,7 +54,7 @@ module.exports = {
         carRide.save()
           .then(function (carRide) {
             //return res.json(carRide);
-            res.render('user/profile');
+            res.redirect('/user/profile');
           })
           .catch(function (err) {
             return res.status(500).json({
@@ -66,7 +67,7 @@ module.exports = {
     /**
      * carRideController.update()
      */
-    update: function (req, res) {
+    update: async function (req, res) {
         /*
         var id = req.params.id;
 
@@ -99,41 +100,55 @@ module.exports = {
             });
         });
         */
-        var id = req.params.id;
+            var id = req.params.id;
 
-        carRideModel.findOne({_id: id})
-    .then(function (carRide) {
-        if (!carRide) {
-            return res.status(404).json({
-                message: 'No such carRide'
-            });
-        }
-
-        // Generate random data using deviceDataController.js createRandom function
-        var randomData = deviceDataController.createRandomForCarRide(req.session.userId);
-
-        // Add the random data to the deviceData field of the car ride
-        carRide.deviceData.push(randomData);
-
-        carRide.save()
-            .then(function (updatedCarRide) {
-                return res.json(updatedCarRide);
-            })
-            .catch(function (err) {
-                console.error('Error when updating carRide:', err); // Log the error
-                return res.status(500).json({
-                    message: 'Error when updating carRide.',
-                    error: err
+            carRideModel.findOne({_id: id})
+        .then( async function (carRide) {
+            if (!carRide) {
+                return res.status(404).json({
+                    message: 'No such carRide'
                 });
+            }
+            try{
+                deviceDataController.createRandomForCarRide(req.session.userId)
+                .then(function (randomData){
+                    console.log(randomData);
+                    // Add the random data to the deviceData field of the car ride
+                    carRide.deviceData.push(randomData);
+
+                    carRide.save()
+                        .then(function (updatedCarRide) {
+                            //return res.json(updatedCarRide);
+                            return res.redirect("/user/profile")
+                        })
+                        .catch(function (err) {
+                            console.error('Error when updating carRide:', err); // Log the error
+                            return res.status(500).json({
+                                message: 'Error when updating carRide.',
+                                error: err
+                            });
+                        });
+                    
+                })
+                .catch(function (err) {
+                    console.error('Error when generating random data:', err); // Log the error
+                    return res.status(500).json({
+                      message: 'Error when generating random data.',
+                      error: err
+                    });
+                  });
+            }catch(err){
+                console.log("Error", err);
+            }
+            
+        })
+        .catch(function (err) {
+            console.error('Error when getting carRide:', err); // Log the error
+            return res.status(500).json({
+                message: 'Error when getting carRide',
+                error: err
             });
-    })
-    .catch(function (err) {
-        console.error('Error when getting carRide:', err); // Log the error
-        return res.status(500).json({
-            message: 'Error when getting carRide',
-            error: err
         });
-    });
 
     },
 
@@ -143,15 +158,52 @@ module.exports = {
     remove: function (req, res) {
         var id = req.params.id;
 
-        carRideModel.findByIdAndRemove(id, function (err, carRide) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when deleting the carRide.',
-                    error: err
-                });
+        // Get the carRide document
+        carRideModel.findById(id)
+        .then((carRide) => {
+            if (!carRide) {
+            return res.status(404).json({
+                message: 'No such carRide',
+            });
             }
 
-            return res.status(204).json();
+            // Delete the associated deviceData documents
+            var deviceDataIds = carRide.deviceData;
+            var deletePromises = deviceDataIds.map((deviceId) => {
+                return deviceDataModel.findByIdAndRemove(deviceId)
+                  .catch((err) => {
+                    console.error('Error when deleting deviceData:', err);
+                    throw err; // Rethrow the error to reject the promise
+                  });
+              });
+            Promise.all(deletePromises)
+            .then(() => {
+                // Delete the carRide document
+                carRide.deleteOne()
+                .then(() => {
+                    return res.redirect("/user/profile");
+                })
+                .catch((err) => {
+                    return res.status(500).json({
+                    message: 'Error when deleting the carRide.',
+                    error: err,
+                    });
+                });
+            })
+            .catch((err) => {
+                console.log("Error: ", err)
+                return res.status(500).json({
+                message: 'Error when deleting associated deviceData.',
+                error: err,
+                });
+            });
+        })
+        .catch((err) => {
+            console.error('Error when getting carRide:', err);
+            return res.status(500).json({
+            message: 'Error when getting carRide',
+            error: err,
+            });
         });
     }
 };

@@ -129,47 +129,51 @@ module.exports = {
     // Made a new function for testing purposes
     // Because it need to return a object the other function just redirects the user
     createRandomForCarRide: function (user) {
-        function getRandomValues(min, max, count) {
-            if(count == 1) {
-                return Math.random() * (max - min) + min;
+        return new Promise((resolve, reject) => {
+            function getRandomValues(min, max, count) {
+                if(count == 1) {
+                    return Math.random() * (max - min) + min;
+                }
+                var values = [];
+                for (var i = 0; i < count; i++) {
+                    var value = Math.random() * (max - min) + min;
+                    values.push(value);
+                }
+                return values;
             }
-            var values = [];
-            for (var i = 0; i < count; i++) {
-                var value = Math.random() * (max - min) + min;
-                values.push(value);
-            }
-            return values;
-        }
-
-        var accelerometerXValues = getRandomValues(-16, 16, 100);
-        var accelerometerYValues = getRandomValues(-16, 16, 100);
-        var accelerometerZValues = getRandomValues(-16, 16, 100);
-        var gyroscopeXValues = getRandomValues(-50, 50, 100);
-        var gyroscopeYValues = getRandomValues(-50, 50, 100);
-        var gyroscopeZValues = getRandomValues(-50, 50, 100);
-
-        var deviceData = new DevicedataModel({
-            accelerometerX: accelerometerXValues,
-            accelerometerY: accelerometerYValues,
-            accelerometerZ: accelerometerZValues,
-            gyroscopeX: gyroscopeXValues,
-            gyroscopeY: gyroscopeYValues,
-            gyroscopeZ: gyroscopeZValues,
-            latitude: getRandomValues(-90, 90, 1),
-            longitude: getRandomValues(-180, 180,1),
-            timestamp: new Date(),
-            user: user,
-            rating: Math.random(0, 100)
-        });
-
-        deviceData
-            .save()
-            .then(savedData => {
-                return savedData;
-            })
-            .catch(error => {
-                return 0;
+    
+            var accelerometerXValues = getRandomValues(-16, 16, 100);
+            var accelerometerYValues = getRandomValues(-16, 16, 100);
+            var accelerometerZValues = getRandomValues(-16, 16, 100);
+            var gyroscopeXValues = getRandomValues(-50, 50, 100);
+            var gyroscopeYValues = getRandomValues(-50, 50, 100);
+            var gyroscopeZValues = getRandomValues(-50, 50, 100);
+    
+            var deviceData = new DevicedataModel({
+                accelerometerX: accelerometerXValues,
+                accelerometerY: accelerometerYValues,
+                accelerometerZ: accelerometerZValues,
+                gyroscopeX: gyroscopeXValues,
+                gyroscopeY: gyroscopeYValues,
+                gyroscopeZ: gyroscopeZValues,
+                latitude: getRandomValues(-90, 90, 1),
+                longitude: getRandomValues(-180, 180,1),
+                timestamp: new Date(),
+                user: user,
+                rating: Math.random(0, 100)
             });
+    
+            deviceData
+                .save()
+                .then(savedData => {
+                    console.log("Returning deviceData");
+                    //console.log(deviceData);
+                    resolve(deviceData);
+                })
+                .catch(error => {
+                    return 0;
+                });
+        })
     },
 
 

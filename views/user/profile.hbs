@@ -13,6 +13,7 @@
         <th>Id</th>
         <th>Device Data Length</th>
         <th>Date</th>
+        <th></th>
         <!-- Add table headers for other car ride properties as needed -->
       </tr>
     </thead>
@@ -26,6 +27,11 @@
             </div>
             </form> </td>
           <td>{{ this.dateOfRide }}</td>
+          <td><form action="/carRide/{{this._id}}?_method=DELETE" method="POST">
+            <div>
+                <button type="submit" class="btn btn-primary">Izbrisi carRide</button>
+            </div>
+            </form></td>
           <!-- Display other car ride properties as needed -->
         </tr>
       {{/each}}
@@ -33,11 +39,11 @@
   </table>
 {{else}}
   <p class="no-carRides">No car rides available yet.</p>
-  <!-- Creates a new carRide to which you will later be able to add random data (for testing purposes) -->
-  <form action="/carRide" method="POST" class="carRide-button">
+{{/if}}
+
+<form action="/carRide" method="POST" class="carRide-button">
     <button>Start carRide</button>
   </form>
-{{/if}}
 
 
 <br><a type="button" href="logout">Odjava </a>
