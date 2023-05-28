@@ -102,36 +102,39 @@ module.exports = {
         var id = req.params.id;
 
         carRideModel.findOne({_id: id})
-            .then(function (carRide) {
-                if (!carRide) {
-                    return res.status(404).json({
-                        message: 'No such carRide'
-                    });
-                }
-    
-                // Generate random data using deviceDataController.js createRandom function
-                var randomData = deviceDataController.createRandomForCarRide();
-    
-                // Add the random data to the deviceData field of the car ride
-                carRide.deviceData.push(randomData);
-    
-                carRide.save()
-                    .then(function (updatedCarRide) {
-                        return res.json(updatedCarRide);
-                    })
-                    .catch(function (err) {
-                        return res.status(500).json({
-                            message: 'Error when updating carRide.',
-                            error: err
-                        });
-                    });
+    .then(function (carRide) {
+        if (!carRide) {
+            return res.status(404).json({
+                message: 'No such carRide'
+            });
+        }
+
+        // Generate random data using deviceDataController.js createRandom function
+        var randomData = deviceDataController.createRandomForCarRide(req.session.userId);
+
+        // Add the random data to the deviceData field of the car ride
+        carRide.deviceData.push(randomData);
+
+        carRide.save()
+            .then(function (updatedCarRide) {
+                return res.json(updatedCarRide);
             })
             .catch(function (err) {
+                console.error('Error when updating carRide:', err); // Log the error
                 return res.status(500).json({
-                    message: 'Error when getting carRide',
+                    message: 'Error when updating carRide.',
                     error: err
                 });
             });
+    })
+    .catch(function (err) {
+        console.error('Error when getting carRide:', err); // Log the error
+        return res.status(500).json({
+            message: 'Error when getting carRide',
+            error: err
+        });
+    });
+
     },
 
     /**

@@ -128,7 +128,7 @@ module.exports = {
 
     // Made a new function for testing purposes
     // Because it need to return a object the other function just redirects the user
-    createRandomForCarRide: function (req, res) {
+    createRandomForCarRide: function (user) {
         function getRandomValues(min, max, count) {
             if(count == 1) {
                 return Math.random() * (max - min) + min;
@@ -158,7 +158,7 @@ module.exports = {
             latitude: getRandomValues(-90, 90, 1),
             longitude: getRandomValues(-180, 180,1),
             timestamp: new Date(),
-            user: req.session.userId,
+            user: user,
             rating: Math.random(0, 100)
         });
 
@@ -168,10 +168,7 @@ module.exports = {
                 return savedData;
             })
             .catch(error => {
-                return res.status(500).json({
-                    message: 'Error when creating deviceData',
-                    error: error
-                });
+                return 0;
             });
     },
 
