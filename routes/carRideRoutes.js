@@ -10,6 +10,8 @@ router.use(methodOverride('_method'));
  * GET
  */
 router.get('/', carRideController.list);
+router.get('/getLongLat/:id', carRideController.retrieveLongLatFromCarRide);
+//router.get('/mapShowcase', carRideController.showMapShowcase);
 
 /*
  * GET

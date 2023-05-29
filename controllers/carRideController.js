@@ -205,5 +205,36 @@ module.exports = {
             error: err,
             });
         });
+    },
+
+    retrieveLongLatFromCarRide : function(req, res){
+        var carRideId = req.params.id;
+
+        carRideModel.findById(carRideId)
+            .populate('deviceData') // Populate the deviceData array field
+            .then(function (carRide) {
+            if (!carRide) {
+                return res.status(404).json({
+                message: 'No such carRide'
+                });
+            }
+
+            // Extract latitude and longitude from deviceData
+            var deviceDataArray = carRide.deviceData.map(function (deviceData) {
+                return {
+                latitude: deviceData.latitude,
+                longitude: deviceData.longitude
+                };
+            });
+
+            // Return the array of latitude and longitude
+            res.render('carRide/mapShowcase', { deviceData: deviceDataArray });
+            })
+            .catch(function (err) {
+            return res.status(500).json({
+                message: 'Error when getting carRide',
+                error: err
+            });
+            });
     }
 };

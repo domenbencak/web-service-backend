@@ -14,6 +14,7 @@
         <th>Device Data Length</th>
         <th>Date</th>
         <th></th>
+        <th></th>
         <!-- Add table headers for other car ride properties as needed -->
       </tr>
     </thead>
@@ -27,9 +28,14 @@
             </div>
             </form> </td>
           <td>{{ this.dateOfRide }}</td>
+          <td><form action="/carRide/getLongLat/{{this._id}}" method="GET">
+            <div>
+                <button type="submit" class="btn btn-primary">Info</button>
+            </div>
+            </form></td>
           <td><form action="/carRide/{{this._id}}?_method=DELETE" method="POST">
             <div>
-                <button type="submit" class="btn btn-primary">Izbrisi carRide</button>
+                <button type="submit" class="btn btn-danger">Izbrisi carRide</button>
             </div>
             </form></td>
           <!-- Display other car ride properties as needed -->
