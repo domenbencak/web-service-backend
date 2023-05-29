@@ -48,7 +48,8 @@ module.exports = {
         var carRide = new carRideModel({
           user: req.body.user,
           deviceData: req.body.deviceData,
-          date: Date.now()
+          date: Date.now(),
+          carRideRating: 0
         });
       
         carRide.save()
@@ -111,14 +112,34 @@ module.exports = {
             }
             try{
                 deviceDataController.createRandomForCarRide(req.session.userId)
-                .then(function (randomData){
-                    console.log(randomData);
+                .then(async function (randomData){
+                    //console.log(randomData);
                     // Add the random data to the deviceData field of the car ride
                     carRide.deviceData.push(randomData);
 
+
+                    var combinedRatings = 0;
+                    //
+                    for(var i = 0; i < carRide.deviceData.length; i++){
+                        await deviceDataController.getRatingById(carRide.deviceData[i]._id)
+                        .then(rating => {
+                            // Use the retrieved rating
+                            console.log('Rating:', rating);
+                            // Continue with your code
+                            combinedRatings += rating;
+                        })
+                        .catch(error => {
+                            console.error('Error when retrieving rating:', error);
+                            // Handle the error
+                        });
+                    }
+
+                    var averageRating = (combinedRatings / carRide.deviceData.length).toFixed(3);
+                    carRide.carRideRating = averageRating;
+
                     carRide.save()
                         .then(function (updatedCarRide) {
-                            //return res.json(updatedCarRide);
+                            // Everything was correctly added to the carRide so save it in the database
                             return res.redirect("/user/profile")
                         })
                         .catch(function (err) {
@@ -236,5 +257,5 @@ module.exports = {
                 error: err
             });
             });
-    }
+    },
 };

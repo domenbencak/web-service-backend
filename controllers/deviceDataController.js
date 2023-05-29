@@ -160,7 +160,7 @@ module.exports = {
                 longitude: getRandomValues(-180, 180,1),
                 timestamp: new Date(),
                 user: user,
-                rating: Math.random(0, 100)
+                rating: (Math.random(0, 100)).toFixed(4)
             });
     
             deviceData
@@ -240,5 +240,21 @@ module.exports = {
 
     publish: function (req, res) {
         return res.render('deviceData/publish');
+    },
+
+    getRatingById: function(deviceDataId) {
+        return new Promise((resolve, reject) => {
+            DevicedataModel.findById(deviceDataId)
+              .then(deviceData => {
+                if (!deviceData) {
+                  reject(new Error('No deviceData found'));
+                } else {
+                  resolve(deviceData.rating);
+                }
+              })
+              .catch(error => {
+                reject(error);
+              });
+          });
     }
 };

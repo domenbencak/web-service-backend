@@ -13,6 +13,7 @@
         <th>Id</th>
         <th>Device Data Length</th>
         <th>Date</th>
+        <th>Rating</th>
         <th></th>
         <th></th>
         <!-- Add table headers for other car ride properties as needed -->
@@ -28,6 +29,7 @@
             </div>
             </form> </td>
           <td>{{ this.dateOfRide }}</td>
+          <td>{{ this.carRideRating }}</td>
           <td><form action="/carRide/getLongLat/{{this._id}}" method="GET">
             <div>
                 <button type="submit" class="btn btn-primary">Info</button>
