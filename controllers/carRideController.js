@@ -51,11 +51,17 @@ module.exports = {
           date: Date.now(),
           carRideRating: 0
         });
+
+        console.log(req.body.user);
       
         carRide.save()
           .then(function (carRide) {
             //return res.json(carRide);
-            res.redirect('/user/profile');
+            // send the id of the carRide back to the device
+            res.status(200).json({
+                id: carRide._id
+            });
+            //res.redirect('/user/profile');
           })
           .catch(function (err) {
             return res.status(500).json({
@@ -69,38 +75,6 @@ module.exports = {
      * carRideController.update()
      */
     update: async function (req, res) {
-        /*
-        var id = req.params.id;
-
-        carRideModel.findOne({_id: id}, function (err, carRide) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when getting carRide',
-                    error: err
-                });
-            }
-
-            if (!carRide) {
-                return res.status(404).json({
-                    message: 'No such carRide'
-                });
-            }
-
-            carRide.user = req.body.user ? req.body.user : carRide.user;
-			carRide.deviceData = req.body.deviceData ? req.body.deviceData : carRide.deviceData;
-			
-            carRide.save(function (err, carRide) {
-                if (err) {
-                    return res.status(500).json({
-                        message: 'Error when updating carRide.',
-                        error: err
-                    });
-                }
-
-                return res.json(carRide);
-            });
-        });
-        */
             var id = req.params.id;
 
             carRideModel.findOne({_id: id})
@@ -167,6 +141,73 @@ module.exports = {
             });
         });
 
+    },
+
+    updateCarRideMobile: function(req, res){
+        console.log("Received data: ", req.body.jsonData);
+        console.log("Req.body", req.body);
+        
+        var id = req.body.carRideId;
+
+        carRideModel.findOne({ _id: id })
+        .then(async function (carRide) {
+            if (!carRide) {
+                console.log("No such carRide");
+                return res.status(404).json({
+                message: 'No such carRide'
+                });
+            }
+
+            deviceDataController.create(req, res)
+            .then(async function (deviceData){
+                carRide.deviceData.push(deviceData);
+
+                var combinedRatings = 0;
+                for(var i = 0; i < carRide.deviceData.length; i++){
+                    // gets the rating of each deviceData input
+                    await deviceDataController.getRatingById(carRide.deviceData[i]._id)
+                    .then(rating => {
+                        combinedRatings += rating;
+                    })
+                    .catch(error => {
+                        console.error('Error when retrieving rating:', error);
+                    });
+                }
+
+                var averageRating = (combinedRatings / carRide.deviceData.length).toFixed(3);
+                carRide.carRideRating = averageRating;
+
+                carRide.save()
+                .then(function (updatedCarRide) {
+                    // Everything was correctly added to the carRide so save it in the database
+                    return res.redirect("/user/profile")
+                })
+                .catch(function (err) {
+                    console.error('Error when updating carRide:', err); // Log the error
+                    return res.status(500).json({
+                        message: 'Error when updating carRide.',
+                        error: err
+                    });
+                });
+            })
+            .catch(function (err) {
+                console.error('Error when creating deviceData for carRide:', err); // Log the error
+                return res.status(500).json({
+                  message: 'Error when creating deviceData for carRide.',
+                  error: err
+                });
+            });
+            
+        })
+        .catch(function (err) {
+            console.error('Error when generating random data:', err); // Log the error
+            return res.status(500).json({
+              message: 'Error when generating random data.',
+              error: err
+            });
+          });
+        // Add the new deviceData to the deviceData field of the car ride
+        //carRide.deviceData.push(newDeviceData._id);
     },
 
     /**

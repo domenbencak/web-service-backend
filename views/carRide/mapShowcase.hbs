@@ -51,7 +51,7 @@
         navigator.geolocation.getCurrentPosition(function (position) {
             // Update the map view with the user's location
             var userLocation = ol.proj.fromLonLat([position.coords.longitude, position.coords.latitude]) ?? ol.proj.fromLonLat(46.55947, 15.63293);
-            map.getView().setZoom(10);
+            map.getView().setZoom(14);
 
             // Convert latitude and longitude arrays to line coordinates
             var lineCoordinates = [];
@@ -89,7 +89,7 @@
                 var lineStyle = new ol.style.Style({
                     stroke: new ol.style.Stroke({
                         color: color,
-                        width: 2
+                        width: 10
                     })
                 });
 

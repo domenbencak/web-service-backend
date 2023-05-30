@@ -27,6 +27,7 @@ router.post('/', carRideController.create);
  * PUT
  */
 router.put('/:id', carRideController.update);
+router.put('/:id/updateRideMobile', carRideController.updateCarRideMobile);
 
 /*
  * DELETE

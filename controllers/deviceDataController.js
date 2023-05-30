@@ -1,6 +1,8 @@
 const session = require('express-session');
 var DevicedataModel = require('../models/deviceDataModel.js');
 
+const mongoose = require('mongoose');
+
 /**
  * deviceDataController.js
  *
@@ -49,33 +51,49 @@ module.exports = {
      * deviceDataController.create()
      */
     create: function (req, res) {
-    var deviceData = new DevicedataModel({
-        accelerometerX: req.body.accelerometerX,
-        accelerometerY: req.body.accelerometerY,
-        accelerometerZ: req.body.accelerometerZ,
-        gyroscopeX: req.body.gyroscopeX,
-        gyroscopeY: req.body.gyroscopeY,
-        gyroscopeZ: req.body.gyroscopeZ,
-        latitude: req.body.latitude,
-        longitude: req.body.longitude,
-        timestamp: req.body.timestamp,
-        user: req.session.userId,
-        rating: req.body.rating
-    });
+        return new Promise((resolve, reject) => {
+            /*var deviceData = new DevicedataModel({
+            accelerometerX: req.body.accelerometerX,
+            accelerometerY: req.body.accelerometerY,
+            accelerometerZ: req.body.accelerometerZ,
+            gyroscopeX: req.body.gyroscopeX,
+            gyroscopeY: req.body.gyroscopeY,
+            gyroscopeZ: req.body.gyroscopeZ,
+            latitude: req.body.latitude,
+            longitude: req.body.longitude,
+            timestamp: req.body.timestamp,
+            user: req.session.userId,
+            rating: req.body.rating
+        });*/
 
-    deviceData
-        .save()
-        .then(savedData => {
-            console.log("rating: ", req.body.rating,"user_id: ", req.body.user);
-            return res.send('Message received successfully');
-        })
-        .catch(error => {
-            return res.status(500).json({
-                message: 'Error when creating deviceData',
-                error: error
-            });
+        console.log("In deviceData: ", req.body);
+
+        var deviceData = new DevicedataModel({
+            accelerometerX: req.body.accelerometerX,
+            accelerometerY: req.body.accelerometerY,
+            accelerometerZ: req.body.accelerometerZ,
+            gyroscopeX: req.body.gyroscopeX,
+            gyroscopeY: req.body.gyroscopeY,
+            gyroscopeZ: req.body.gyroscopeZ,
+            latitude: req.body.latitude,
+            longitude: req.body.longitude,
+            timestamp: Date.now(),
+            user: req.body.user,
+            rating: req.body.rating,
+            carRideId: req.body.carRideId 
         });
-},
+
+        deviceData
+            .save()
+            .then(savedData => {
+                //console.log("rating: ", req.body.rating,"user_id: ", req.body.user);
+                resolve(deviceData);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        })
+    },
 
 
 

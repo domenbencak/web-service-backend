@@ -15,7 +15,11 @@ var deviceDataSchema = new Schema({
 	 	type: Schema.Types.ObjectId,
 	 	ref: 'user'
 	},
-	'rating' : Number
+	'rating' : Number,
+	'carRideId' : {
+		type: Schema.Types.ObjectId,
+		ref: 'carRide'
+   },
 });
 
 module.exports = mongoose.model('deviceData', deviceDataSchema);
