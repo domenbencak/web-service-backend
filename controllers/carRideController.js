@@ -117,20 +117,16 @@ module.exports = {
                     // Add the random data to the deviceData field of the car ride
                     carRide.deviceData.push(randomData);
 
-
                     var combinedRatings = 0;
                     //
                     for(var i = 0; i < carRide.deviceData.length; i++){
+                        // gets the rating of each deviceData input
                         await deviceDataController.getRatingById(carRide.deviceData[i]._id)
                         .then(rating => {
-                            // Use the retrieved rating
-                            console.log('Rating:', rating);
-                            // Continue with your code
                             combinedRatings += rating;
                         })
                         .catch(error => {
                             console.error('Error when retrieving rating:', error);
-                            // Handle the error
                         });
                     }
 
@@ -244,7 +240,8 @@ module.exports = {
             var deviceDataArray = carRide.deviceData.map(function (deviceData) {
                 return {
                 latitude: deviceData.latitude,
-                longitude: deviceData.longitude
+                longitude: deviceData.longitude,
+                rating: deviceData.rating
                 };
             });
 
