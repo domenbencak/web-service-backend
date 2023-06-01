@@ -30,19 +30,24 @@
 <script src="https://openlayers.org/en/v6.6.1/build/ol.js"></script>
 <script>
     // Create a map instance
-    var map = new ol.Map({
-        target: 'map',
-        layers: [
-            new ol.layer.Tile({
-                source: new ol.source.OSM()
-            })
-        ],
-        view: new ol.View({
-            center: ol.proj.fromLonLat([0, 0]),
-            zoom: 2
-        }),
-        controls: ol.control.defaults({ attribution: false })
-    });
+        var map = new ol.Map({
+            target: 'map',
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM(),
+                }),
+            ],
+            view: new ol.View({
+                center: ol.proj.fromLonLat([0, 0]),
+                zoom: 2,
+            }),
+            controls: ol.control.defaults({ attribution: false }),
+        });
+
+        // Function to center the map
+        function centerMap() {
+            map.getView().setCenter(ol.proj.fromLonLat([0, 0]));
+        }
 
     function initialMapDraw(){
         map.getView().setZoom(14);
@@ -93,7 +98,7 @@
                 color = 'rgb(255, 0, 0)'; // Red
             }
             else {
-                color = 'rgb(0, 0, 255)'; // Blue
+                color = 'rgb(53, 121, 246)'; // Blue
             }
 
 
@@ -180,7 +185,7 @@
                 color = 'rgb(255, 0, 0)'; // Red
             }
             else {
-                color = 'rgb(0, 0, 255)'; // Blue
+                color = 'rgb(53, 121, 246)'; // Blue
             }
 
         var lineStyle = new ol.style.Style({
