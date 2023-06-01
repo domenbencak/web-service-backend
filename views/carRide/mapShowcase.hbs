@@ -187,9 +187,9 @@
         xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
-            console.log(xhr.responseText); // Log the response text
-            var newData = JSON.parse(xhr.responseText);
-            updateMap(newData);
+                console.log(xhr.responseText); // Log the response text
+                var newData = JSON.parse(xhr.responseText);
+                updateMap(newData);
             } else {
             console.error('Failed to fetch new data');
             }
@@ -199,6 +199,6 @@
   }
 
   // Example of updating the map with new data every 5 seconds
-  setInterval(fetchDataAndUpdateMap, 10050);
+  setInterval(fetchDataAndUpdateMap, 1000);
     
 </script>
