@@ -3,9 +3,6 @@ var deviceDataController = require('../controllers/deviceDataController.js');
 const deviceDataModel = require('../models/deviceDataModel.js');
 const { wss } = require('../app.js');
 const { tt } = require('../app.js');
-
-console.log("CarRideController init");
-
 /**
  * carRideController.js
  *
@@ -17,6 +14,17 @@ module.exports = {
      */
     list: async function (req, res, next) {
         return carRideModel.find().exec();
+    },
+
+    findCarRidesByUserId: async function (req, res){
+        try {
+            const userId = req.session.userId;
+
+            return carRideModel.find({ user: userId }).exec();
+          } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Internal Server Error' });
+          }
     },
 
     /**
@@ -58,12 +66,32 @@ module.exports = {
       
         carRide.save()
           .then(function (carRide) {
-            //return res.json(carRide);
             // send the id of the carRide back to the device
             res.status(200).json({
                 id: carRide._id
             });
-            //res.redirect('/user/profile');
+          })
+          .catch(function (err) {
+            return res.status(500).json({
+              message: 'Error when creating carRide',
+              error: err
+            });
+          });
+      },
+
+      createOnWebsite: function (req, res) {
+        var carRide = new carRideModel({
+          user: req.session.userId,
+          deviceData: req.body.deviceData,
+          date: Date.now(),
+          carRideRating: 0
+        });
+
+        console.log(req.body.user);
+      
+        carRide.save()
+          .then(function (carRide) {
+            res.redirect('/user/profile');
           })
           .catch(function (err) {
             return res.status(500).json({

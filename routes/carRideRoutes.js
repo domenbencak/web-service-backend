@@ -24,6 +24,7 @@ router.get('/:id', carRideController.show);
  * POST
  */
 router.post('/', carRideController.create);
+router.post('/createOnWebsite', carRideController.createOnWebsite);
 
 /*
  * PUT

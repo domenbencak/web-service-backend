@@ -16,6 +16,7 @@ router.get('/:id', userController.show);
  * POST
  */
 router.post('/', userController.create);
+router.post('/mobile', userController.createMobile);
 router.post('/login', userController.login);
 router.post('/loginMobile', userController.loginMobile);
 

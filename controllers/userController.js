@@ -60,8 +60,30 @@ module.exports = {
 
         user.save()
         .then(function (user) {
-            //return res.status(201).json(user);
             return res.redirect('/user/login');
+        })
+        .catch(function (err) {
+            return res.status(500).json({
+                message: 'Error when creating user',
+                error: err
+            });
+        });
+    },
+
+    createMobile: function (req, res) {
+        var user = new UserModel({
+			username : req.body.username,
+			email : req.body.email,
+			password : req.body.password
+        });
+
+        user.save()
+        .then(function (user) {
+            //return res.status(201).json(user);
+            //return res.status(200);
+            console.log("Registration successful");
+            res.status(200).json({ message: 'Registration successful' });
+            //return res.redirect('/user/login');
         })
         .catch(function (err) {
             return res.status(500).json({
@@ -174,6 +196,7 @@ module.exports = {
 
 
     profile: function(req, res,next){
+        //console.log(req.session.userId);
         UserModel.findById(req.session.userId)
         .exec()
         .then(function(user) {
@@ -182,7 +205,7 @@ module.exports = {
             err.status = 400;
             return next(err);
         } else {
-            CarRideController.list()
+            CarRideController.findCarRidesByUserId(req, res)
                 .then(function(carRides) {
                     res.render('user/profile', { user: user, carRides: carRides });
                 })
@@ -216,3 +239,4 @@ module.exports = {
         }
     }
 };
+
