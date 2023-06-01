@@ -8,10 +8,8 @@ a {
 }
 
 #map {
-  height: 500px;
-  /* Adjust the height as per your requirement */
+  height: 100%;
   width: 100%;
-  /* Adjust the width as per your requirement */
 }
 
 .carRides-table {
