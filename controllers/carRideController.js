@@ -383,6 +383,7 @@ module.exports = {
         .then(() => {
         //res.status(200).json({ message: 'All car rides deleted successfully.' });
             console.log("All car rides deleted successfully.");
+            res.redirect('/');
         })
         .catch((error) => {
             console.error(error);
