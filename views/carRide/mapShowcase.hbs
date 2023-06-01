@@ -29,6 +29,7 @@
 
 <script src="https://openlayers.org/en/v6.6.1/build/ol.js"></script>
 <script>
+    Boolean isCentered = false;
     // Create a map instance
     var map = new ol.Map({
         target: 'map',
@@ -65,12 +66,51 @@
 
         // Function to center the map
         function centerMap() {
+            isCentered = true;
             map.getView().setCenter(ol.proj.fromLonLat([0, 0]));
         }
 
     function initialMapDraw(){
         map.getView().setZoom(14);
         // Convert latitude and longitude arrays to line coordinates
+
+        // Get the last coordinate for the current location marker
+        var lastCoordinate = lineCoordinates[lineCoordinates.length - 1];
+
+        // Create a point feature for the current location marker
+        var currentLocationMarker = new ol.Feature({
+            geometry: new ol.geom.Point(lastCoordinate),
+        });
+
+        // Create a style for the current location marker
+        var currentLocationStyle = new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: 6,
+                fill: new ol.style.Fill({
+                    color: 'white',
+                }),
+                stroke: new ol.style.Stroke({
+                    color: 'black',
+                    width: 2,
+                }),
+            }),
+        });
+
+        // Apply the style to the current location marker feature
+        currentLocationMarker.setStyle(currentLocationStyle);
+
+        // Create a vector source and layer for the current location marker
+        var currentLocationSource = new ol.source.Vector({
+            features: [currentLocationMarker],
+        });
+
+        var currentLocationLayer = new ol.layer.Vector({
+            source: currentLocationSource,
+        });
+
+        // Add the current location marker layer to the map
+        map.addLayer(currentLocationLayer);
+
         var lineCoordinates = [];
         for (var i = 0; i < latitudes.length; i++) {
             var coordinate = ol.proj.fromLonLat([longitudes[i], latitudes[i]]);
@@ -162,7 +202,9 @@
         }
 
         console.log(lineCoordinates);
-        map.getView().setCenter(lineCoordinates[lineCoordinates.length-1]);
+        if(isCentered){
+            map.getView().setCenter(lineCoordinates[lineCoordinates.length-1]);
+        }
 
         // Create an array to hold the line features
         var lineFeatures = [];

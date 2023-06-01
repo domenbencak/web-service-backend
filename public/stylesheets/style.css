@@ -24,6 +24,12 @@ a {
   font-size: 14px;
 }
 
+.current-location-marker {
+  fill: white;
+  stroke: black;
+  stroke-width: 2px;
+}
+
 .carRides-table {
   border-collapse: collapse;
   width: 100%;
