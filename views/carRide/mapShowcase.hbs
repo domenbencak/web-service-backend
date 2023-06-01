@@ -53,7 +53,7 @@
 
     // Define the button click event handler
     button.addEventListener('click', function () {
-        isCentered = true;
+        isCentered = !isCentered;
         //map.getView().setCenter(ol.proj.fromLonLat(lastCoordinate));
     });
 
@@ -68,7 +68,7 @@
 
         // Function to center the map
         function centerMap() {
-            isCentered = true;
+            isCentered = !isCentered;
             //map.getView().setCenter(ol.proj.fromLonLat(lastCoordinate));
         }
 
