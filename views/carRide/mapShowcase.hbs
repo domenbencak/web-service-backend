@@ -156,10 +156,7 @@
     function updateMap(data){
         //map.getView().setZoom(14);
 
-        // Remove old currentLocation marker
-        if(currentLocationLayer) {
-            map.removeLayer(currentLocationLayer);
-        }
+        
         // Convert latitude and longitude arrays to line coordinates
         var lineCoordinates = [];
         var ratingOfSections = [];
@@ -277,7 +274,11 @@
             source: currentLocationSource,
         });
 
-
+        // Remove old currentLocation marker
+        if (currentLocationLayer) {
+            map.removeLayer(currentLocationLayer);
+        }
+        
         // Add the current location marker layer to the map
         map.addLayer(currentLocationLayer);
 
