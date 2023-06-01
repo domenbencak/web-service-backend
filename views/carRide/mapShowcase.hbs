@@ -157,7 +157,9 @@
         //map.getView().setZoom(14);
 
         // Remove old currentLocation marker
-        map.removeLayer(currentLocationLayer);
+        if(currentLocationLayer) {
+            map.removeLayer(currentLocationLayer);
+        }
         // Convert latitude and longitude arrays to line coordinates
         var lineCoordinates = [];
         var ratingOfSections = [];
