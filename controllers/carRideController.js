@@ -365,8 +365,8 @@ module.exports = {
             });
 
             // Send the JSON data as a separate response
-            console.log("HEYA");
-            console.log(deviceDataArray); 
+            //console.log("HEYA");
+            //console.log(deviceDataArray); 
             res.json(deviceDataArray);
             })
             .catch(function (err) {
