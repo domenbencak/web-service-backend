@@ -35,6 +35,7 @@ router.put('/:id/updateRideMobile', carRideController.updateCarRideMobile);
 /*
  * DELETE
  */
-router.delete('/:id', carRideController.remove);
+router.delete('/deleteOne/:id', carRideController.remove);
+router.delete('/deleteAll', carRideController.deleteAllCarRides);
 
 module.exports = router;

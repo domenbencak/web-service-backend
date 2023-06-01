@@ -166,7 +166,7 @@ module.exports = {
         .catch(function (err) {
             console.error('Error when getting carRide:', err); // Log the error
             return res.status(500).json({
-                message: 'Error when getting carRide',
+                message: 'Error when getting carRide in update function',
                 error: err
             });
         });
@@ -296,7 +296,7 @@ module.exports = {
         .catch((err) => {
             console.error('Error when getting carRide:', err);
             return res.status(500).json({
-            message: 'Error when getting carRide',
+            message: 'Error when getting carRide in remove function',
             error: err,
             });
         });
@@ -332,7 +332,7 @@ module.exports = {
             })
             .catch(function (err) {
             return res.status(500).json({
-                message: 'Error when getting carRide',
+                message: 'Error when getting carRide in retrieveLongLatFromCarRide',
                 error: err
             });
             });
@@ -371,9 +371,22 @@ module.exports = {
             })
             .catch(function (err) {
             return res.status(500).json({
-                message: 'Error when getting carRide',
+                message: 'Error when getting carRide json',
                 error: err
             });
             });
+    },
+
+    deleteAllCarRides : function(req, res){
+        // Delete all car rides from the database
+        carRideModel.deleteMany({})
+        .then(() => {
+        //res.status(200).json({ message: 'All car rides deleted successfully.' });
+            console.log("All car rides deleted successfully.");
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        });
     },
 };

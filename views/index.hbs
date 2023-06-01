@@ -3,6 +3,12 @@
 </script>
 
 <p>Presenting {{carRides.length}} rides on the map.</p>
+<form action="/carRide/deleteAll?_method=DELETE" method="POST">
+    <div>
+        <button type="submit" class="btn btn-danger">Izbrisi vse carRide</button>
+    </div>
+</form>
+
 
 {{#each carRides}}
     {{#each deviceData}}
