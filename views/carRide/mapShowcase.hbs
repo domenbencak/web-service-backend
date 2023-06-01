@@ -30,6 +30,7 @@
 <script src="https://openlayers.org/en/v6.6.1/build/ol.js"></script>
 <script>
     let isCentered = false;
+     var lastCoordinate;
     // Create a map instance
     var map = new ol.Map({
         target: 'map',
@@ -52,7 +53,7 @@
 
     // Define the button click event handler
     button.addEventListener('click', function () {
-        map.getView().setCenter(ol.proj.fromLonLat([0, 0]));
+        map.getView().setCenter(ol.proj.fromLonLat(lastCoordinate));
     });
 
     // Create a custom control element
@@ -67,7 +68,7 @@
         // Function to center the map
         function centerMap() {
             isCentered = true;
-            map.getView().setCenter(ol.proj.fromLonLat([0, 0]));
+            map.getView().setCenter(ol.proj.fromLonLat(lastCoordinate));
         }
 
     function initialMapDraw(){
@@ -246,7 +247,7 @@
         map.addLayer(vectorLayer);
 
                 // Get the last coordinate for the current location marker
-        var lastCoordinate = lineCoordinates[lineCoordinates.length - 1];
+       lastCoordinate = lineCoordinates[lineCoordinates.length - 1];
 
         // Create a point feature for the current location marker
         var currentLocationMarker = new ol.Feature({
