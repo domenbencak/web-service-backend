@@ -1,7 +1,10 @@
 var carRideModel = require('../models/carRideModel.js');
 var deviceDataController = require('../controllers/deviceDataController.js');
 const deviceDataModel = require('../models/deviceDataModel.js');
+const { wss } = require('../app.js');
+const { tt } = require('../app.js');
 
+console.log("CarRideController init");
 
 /**
  * carRideController.js
@@ -9,7 +12,6 @@ const deviceDataModel = require('../models/deviceDataModel.js');
  * @description :: Server-side logic for managing carRides.
  */
 module.exports = {
-
     /**
      * carRideController.list()
      */
@@ -179,8 +181,15 @@ module.exports = {
 
                 carRide.save()
                 .then(function (updatedCarRide) {
-                    // Everything was correctly added to the carRide so save it in the database
-                    return res.redirect("/user/profile")
+                    var message = 'Car ride updated successfully';
+                    /*wss.clients.forEach(function each(client) {
+                    // Check if the client is the intended recipient (you can use any condition here)
+                    if (client.id === req.body.clientId) {
+                        client.send(message);
+                    }
+                    });*/
+
+                    res.status(200).json({ message: message });
                 })
                 .catch(function (err) {
                     console.error('Error when updating carRide:', err); // Log the error
@@ -265,8 +274,13 @@ module.exports = {
         });
     },
 
-    retrieveLongLatFromCarRide : function(req, res){
+    retrieveLongLatFromCarRide : async function(req, res){
         var carRideId = req.params.id;
+        /*console.log("WSS-clientshere: ", tt);
+        tt.forEach(function (client){
+            console.log("i");
+        })
+        console.log(tt.length);*/
 
         carRideModel.findById(carRideId)
             .populate('deviceData') // Populate the deviceData array field
@@ -286,8 +300,60 @@ module.exports = {
                 };
             });
 
+            /*const { sendMessage } = require('../app.js');
+            try{
+                console.log("aaaa");
+                sendMessage();
+            }catch(err){
+                console.log(err);
+            }*/
+            
             // Return the array of latitude and longitude
+            //res.render('carRide/mapShowcase', { deviceData: deviceDataArray});
+            // Render the HTML page and pass the deviceData as a variable
             res.render('carRide/mapShowcase', { deviceData: deviceDataArray });
+
+      // Send the JSON data as a separate response
+      //res.json(deviceDataArray);
+            })
+            .catch(function (err) {
+            return res.status(500).json({
+                message: 'Error when getting carRide',
+                error: err
+            });
+            });
+    },
+
+    retrieveLongLatFromCarRideJSON : function(req, res){
+        var carRideId = req.params.id;
+        /*console.log("WSS-clientshere: ", tt);
+        tt.forEach(function (client){
+            console.log("i");
+        })
+        console.log(tt.length);*/
+
+        carRideModel.findById(carRideId)
+            .populate('deviceData') // Populate the deviceData array field
+            .then(function (carRide) {
+            if (!carRide) {
+                return res.status(404).json({
+                message: 'No such carRide'
+                });
+            }
+
+            // Extract latitude and longitude from deviceData
+            var deviceDataArray = carRide.deviceData.map(function (deviceData) {
+                return {
+                latitude: deviceData.latitude,
+                longitude: deviceData.longitude,
+                rating: deviceData.rating
+                };
+            });
+
+            // Send the JSON data as a separate response
+            console.log("HEYA");
+            console.log(deviceDataArray); 
+            res.json(deviceDataArray);
             })
             .catch(function (err) {
             return res.status(500).json({

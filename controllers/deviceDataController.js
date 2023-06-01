@@ -68,6 +68,10 @@ module.exports = {
 
         console.log("In deviceData: ", req.body);
 
+        if (req.body.latitude == 0.0 && req.body.longitude == 0.0) {
+            console.log("No location data");
+        } else {
+
         var deviceData = new DevicedataModel({
             accelerometerX: req.body.accelerometerX,
             accelerometerY: req.body.accelerometerY,
@@ -92,7 +96,9 @@ module.exports = {
             .catch(error => {
                 console.log(error);
             });
+        }
         })
+    
     },
 
 
