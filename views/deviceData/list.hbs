@@ -1,28 +1,90 @@
-<h1>deviceData:</h1>
+<h1>Device Data:</h1>
+
 {{#each deviceDatas}}
-<p>Device Data:</p>
-{{#each this.accelerometerX}}
-<p>Accelerometer X: {{this}}</p>
+  <div>
+    <p>Device Data:</p>
+    {{#each this.accelerometerX}}
+      <p>Accelerometer X: {{this}}</p>
+    {{/each}}
+    {{#each this.accelerometerY}}
+      <p>Accelerometer Y: {{this}}</p>
+    {{/each}}
+    {{#each this.accelerometerZ}}
+      <p>Accelerometer Z: {{this}}</p>
+    {{/each}}
+    {{#each this.gyroscopeX}}
+      <p>Gyroscope X: {{this}}</p>
+    {{/each}}
+    {{#each this.gyroscopeY}}
+      <p>Gyroscope Y: {{this}}</p>
+    {{/each}}
+    {{#each this.gyroscopeZ}}
+      <p>Gyroscope Z: {{this}}</p>
+    {{/each}}
+    <p>Latitude: {{this.latitude}}</p>
+    <p>Longitude: {{this.longitude}}</p>
+    <p>User: {{this.user.username}}</p>
+    <p>Rating: {{this.rating}}</p>
+    <p>Timestamp: {{this.timestamp}}</p>
+    
+    <!-- Add a canvas element for the chart -->
+    <canvas id="chart-{{this._id}}" width="400" height="400"></canvas>
+    <hr />
+  </div>
 {{/each}}
-{{#each this.accelerometerY}}
-<p>Accelerometer Y: {{this}}</p>
-{{/each}}
-{{#each this.accelerometerZ}}
-<p>Accelerometer Z: {{this}}</p>
-{{/each}}
-{{#each this.gyroscopeX}}
-<p>Gyroscope X: {{this}}</p>
-{{/each}}
-{{#each this.gyroscopeY}}
-<p>Gyroscope Y: {{this}}</p>
-{{/each}}
-{{#each this.gyroscopeZ}}
-<p>Gyroscope Z: {{this}}</p>
-{{/each}}
-<p>Latitude: {{this.latitude}}</p>
-<p>Longitude: {{this.longitude}}</p>
-<p>User: {{this.user.username}}</p>
-<p>Rating: {{this.rating}}</p>
-<p>Timestamp: {{this.timestamp}}</p>
-<hr />
-{{/each}}
+
+<!-- Include Chart.js library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Generate chart for each device data -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    {{#each deviceDatas}}
+      // Get the canvas element for the chart
+      var canvas = document.getElementById('chart-{{this._id}}');
+
+      // Generate the chart
+      var chart = new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels: ['Accelerometer X', 'Accelerometer Y', 'Accelerometer Z', 'Gyroscope X', 'Gyroscope Y', 'Gyroscope Z'],
+          datasets: [{
+            label: 'Device Data',
+            data: [
+              {{this.accelerometerX.[0]}},
+              {{this.accelerometerY.[0]}},
+              {{this.accelerometerZ.[0]}},
+              {{this.gyroscopeX.[0]}},
+              {{this.gyroscopeY.[0]}},
+              {{this.gyroscopeZ.[0]}}
+            ],
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    {{/each}}
+  });
+</script>
