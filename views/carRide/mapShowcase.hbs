@@ -45,7 +45,7 @@
     });
 
     function initialMapDraw(){
-        map.getView().setZoom(18);
+        map.getView().setZoom(14);
         // Convert latitude and longitude arrays to line coordinates
         var lineCoordinates = [];
         for (var i = 0; i < latitudes.length; i++) {
@@ -109,7 +109,7 @@
     initialMapDraw();
 
     function updateMap(data){
-        map.getView().setZoom(18);
+        map.getView().setZoom(14);
         // Convert latitude and longitude arrays to line coordinates
         var lineCoordinates = [];
         var ratingOfSections = [];
