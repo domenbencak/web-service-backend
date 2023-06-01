@@ -72,10 +72,13 @@
             //map.getView().setCenter(ol.proj.fromLonLat(lastCoordinate));
         }
 
-        // Event listener for moveend event
-            map.getView().on('moveend', function () {
+       // Event listener for moveend event
+        map.on('moveend', function () {
+            var newCenter = map.getView().getCenter();
+            if (!ol.proj.transform(originalCenter, 'EPSG:3857', 'EPSG:4326').every((val, idx) => val === ol.proj.transform(newCenter, 'EPSG:3857', 'EPSG:4326')[idx])) {
                 isCentered = false;
-            });
+            }
+        });
 
     function initialMapDraw(){
         map.getView().setZoom(14);
