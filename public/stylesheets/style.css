@@ -27,7 +27,7 @@ a {
 .current-location-marker {
   fill: white;
   stroke: black;
-  stroke-width: 2px;
+  stroke-width: 4px;
 }
 
 .carRides-table {
