@@ -274,14 +274,14 @@
             source: currentLocationSource,
         });
 
+        
+
+        // Add the current location marker layer to the map
+        map.addLayer(currentLocationLayer);
         // Remove old currentLocation marker
         if (currentLocationLayer) {
             map.removeLayer(currentLocationLayer);
         }
-        
-        // Add the current location marker layer to the map
-        map.addLayer(currentLocationLayer);
-
         
     }
 
