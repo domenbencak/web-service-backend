@@ -72,14 +72,6 @@
             //map.getView().setCenter(ol.proj.fromLonLat(lastCoordinate));
         }
 
-       // Event listener for moveend event
-        map.on('moveend', function () {
-            var newCenter = map.getView().getCenter();
-            if (!ol.proj.transform(originalCenter, 'EPSG:3857', 'EPSG:4326').every((val, idx) => val === ol.proj.transform(newCenter, 'EPSG:3857', 'EPSG:4326')[idx])) {
-                isCentered = false;
-            }
-        });
-
     function initialMapDraw(){
         map.getView().setZoom(14);
         // Convert latitude and longitude arrays to line coordinates
@@ -300,23 +292,41 @@
      function fetchDataAndUpdateMap() {
     // Retrieve the ID from the URL
         var id = window.location.pathname.split('/').pop();
-
-        // Make an AJAX request to fetch new data from the server
+        var retryCount = 0;
+        var maxRetryCount = 5;
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'json/' + id, true); // Modify the URL to match your server-side endpoint
-        xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                console.log(xhr.responseText); // Log the response text
-                var newData = JSON.parse(xhr.responseText);
-                updateMap(newData);
-            } else {
-            console.error('Failed to fetch new data');
-            }
+        // Make an AJAX request to fetch new data from the server
+        
+        function makeRequest(){
+            xhr.open('GET', 'json/' + id, true); // Modify the URL to match your server-side endpoint
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        console.log(xhr.responseText); // Log the response text
+                        var newData = JSON.parse(xhr.responseText);
+                        updateMap(newData);
+                    } else {
+                    console.error('Failed to fetch new data');
+                    }
+                }
+            };
+
+            xhr.onerror = function () {
+                console.error('Connection refused');
+                retryCount++;
+                if (retryCount < maxRetryCount) {
+                    console.log('Retrying...');
+                    makeRequest();
+                } else {
+                    console.error('Max retry count reached. Stopping further requests.');
+                }
+            };
+
+            xhr.send();
         }
-        };
-        xhr.send();
-  }
+        
+        makeRequest();
+    }
 
   // Example of updating the map with new data every 5 seconds
   setInterval(fetchDataAndUpdateMap, 1000);

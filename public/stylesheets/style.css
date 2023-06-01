@@ -52,3 +52,10 @@ a {
 .carRide-button {
   margin-top: 20px;
 }
+
+.ol-popup {
+  border-radius: 8px;
+  background-color: black;
+  color: white;
+  padding: 10px;
+}

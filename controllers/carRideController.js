@@ -327,22 +327,8 @@ module.exports = {
                 rating: deviceData.rating
                 };
             });
-
-            /*const { sendMessage } = require('../app.js');
-            try{
-                console.log("aaaa");
-                sendMessage();
-            }catch(err){
-                console.log(err);
-            }*/
-            
-            // Return the array of latitude and longitude
-            //res.render('carRide/mapShowcase', { deviceData: deviceDataArray});
             // Render the HTML page and pass the deviceData as a variable
             res.render('carRide/mapShowcase', { deviceData: deviceDataArray });
-
-      // Send the JSON data as a separate response
-      //res.json(deviceDataArray);
             })
             .catch(function (err) {
             return res.status(500).json({

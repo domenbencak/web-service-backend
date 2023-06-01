@@ -1,11 +1,23 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<script>
+    var carRidesArray = [];
+</script>
+
+<p>Presenting {{carRides.length}} rides on the map.</p>
+
+{{#each carRides}}
+    {{#each deviceData}}
+    {{/each}}
+{{/each}}
+
+<div id="popup" class="ol-popup">
+  <div id="popup-content"></div>
+</div>
 
 <div id="map"></div>
 
 <script src="https://openlayers.org/en/v6.6.1/build/ol.js"></script>
 <script>
-    // Create a map instance
+
     var map = new ol.Map({
         target: 'map',
         layers: [
@@ -20,37 +32,104 @@
         controls: ol.control.defaults({ attribution: false })
     });
 
-    // Get the user's current location
-    if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            // Update the map view with the user's location
-            var userLocation = ol.proj.fromLonLat([position.coords.longitude, position.coords.latitude]) ?? ol.proj.fromLonLat(46.55947, 15.63293);
-            map.getView().setCenter(userLocation);
-            map.getView().setZoom(12);
+    var selectInteraction = new ol.interaction.Select({
+        condition: ol.events.condition.click
+    });
 
-            // Define the line coordinates
-            var lineCoordinates = [
-                userLocation,
-                ol.proj.fromLonLat([userLocation[0] + 0.01, userLocation[1] + 1.01]),
-                ol.proj.fromLonLat([userLocation[0] + 1.02, userLocation[1] + 0.00]),
-            ];
+    map.addInteraction(selectInteraction);
 
-            // Create a line feature
+    var popupOverlay = new ol.Overlay({
+        element: document.getElementById('popup'),
+        positioning: 'top-center',
+        stopEvent: false
+    });
+    map.addOverlay(popupOverlay);
+
+    map.getView().setZoom(3);
+
+    // Iterate through each carRide and draw on the map
+    {{#each carRides}}
+        console.log({{@index}});
+        var user = '{{this.carRideUser}}';
+       // console.log("Created by user: ", user)
+        var lineCoordinates = [];
+        var lineFeatures = [];
+        {{#each deviceData}}
+            //<li>Latitude: {{this.latitude}}, Longitude: {{this.longitude}}, Rating: {{this.rating}}</li>
+            var longitude = {{this.longitude}};
+            var latitude = {{this.latitude}};
+            var coordinate = ol.proj.fromLonLat([longitude, latitude]);
+            lineCoordinates.push(coordinate);
+
+            
+            //console.log(latitudes);
+        {{/each}}
+        console.log(lineCoordinates);
+        
+        //var carRideId = {{this.carRideId}};
+        //var lineFeatures = [];
+
+        for(var i = 0; i < lineCoordinates.length - 1; i++){
             var lineFeature = new ol.Feature({
-                geometry: new ol.geom.LineString(lineCoordinates)
+                geometry: new ol.geom.LineString([
+                    lineCoordinates[i],
+                    lineCoordinates[i + 1]
+                ])
             });
 
-            // Create a vector source and layer
-            var vectorSource = new ol.source.Vector({
-                features: [lineFeature]
+            var lineStyle = new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: 'rgb(53, 121, 246)',  // Use RGB values
+                    width: 10
+                })
             });
 
-            var vectorLayer = new ol.layer.Vector({
-                source: vectorSource
+            lineFeature.setStyle(lineStyle);
+
+            lineFeature.setProperties({
+                carRideId: '{{this.carRideId}}',
+                createdByUser: user,
             });
 
-            // Add the vector layer to the map
-            map.addLayer(vectorLayer);
+            lineFeatures.push(lineFeature);
+        }
+
+        var vectorSource = new ol.source.Vector({
+            features: lineFeatures
         });
-    }
+
+        var vectorLayer = new ol.layer.Vector({
+            source: vectorSource
+        });
+
+        map.addLayer(vectorLayer);
+
+        
+    {{/each}}
+
+    selectInteraction.on('select', function (event) {
+        var selectedFeatures = event.target.getFeatures().getArray();
+        if (selectedFeatures.length > 0) {
+            var selectedFeature = selectedFeatures[0];
+            var carRideId = selectedFeature.get('carRideId');
+            var createdByUser = selectedFeature.get('createdByUser');
+
+            console.log('Clicked on carRideId:', carRideId);
+            console.log('Created by user: ', createdByUser)
+
+            var lineCoordinates = selectedFeature.getGeometry().getCoordinates();
+            var midpointIndex = Math.floor(lineCoordinates.length / 2);
+            var midpoint = lineCoordinates[midpointIndex];
+            var popupContent = document.getElementById('popup-content');
+            popupContent.innerHTML = `
+            <div>Car Ride ID: ${carRideId}</div>
+            <div>Created by: ${createdByUser}</div>
+            `;
+
+            var coordinates = selectedFeature.getGeometry().getCoordinates();
+            popupOverlay.setPosition(midpoint);
+        }else{
+            popupOverlay.setPosition(undefined);
+        }
+    });
 </script>
