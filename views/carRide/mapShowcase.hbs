@@ -29,7 +29,6 @@
 
 <script src="https://openlayers.org/en/v6.6.1/build/ol.js"></script>
 <script>
-
     // Create a map instance
     var map = new ol.Map({
         target: 'map',
@@ -45,197 +44,161 @@
         controls: ol.control.defaults({ attribution: false })
     });
 
-    map.getView().setZoom(14);
-    // Convert latitude and longitude arrays to line coordinates
-    var lineCoordinates = [];
-    for (var i = 0; i < latitudes.length; i++) {
-        var coordinate = ol.proj.fromLonLat([longitudes[i], latitudes[i]]);
-        lineCoordinates.push(coordinate);
+    function initialMapDraw(){
+        map.getView().setZoom(18);
+        // Convert latitude and longitude arrays to line coordinates
+        var lineCoordinates = [];
+        for (var i = 0; i < latitudes.length; i++) {
+            var coordinate = ol.proj.fromLonLat([longitudes[i], latitudes[i]]);
+            lineCoordinates.push(coordinate);
+        }
+
+        console.log(lineCoordinates);
+        map.getView().setCenter(lineCoordinates[lineCoordinates.length-1]);
+
+        // Create an array to hold the line features
+        var lineFeatures = [];
+
+        for (var i = 0; i < lineCoordinates.length - 1; i++) {
+        // Create a line feature for each line segment
+        var lineFeature = new ol.Feature({
+            geometry: new ol.geom.LineString([
+                lineCoordinates[i],
+                lineCoordinates[i + 1]
+            ])
+        });
+
+        // Create a style for the line feature based on the rating
+        var rating = ratingOfSections[i];
+        var color;
+        if (rating >= 66) {
+            color = 'rgb(0, 255, 0)'; // Green
+        } else if (rating >= 33) {
+            color = 'rgb(255, 255, 0)'; // Yellow
+        } else {
+            color = 'rgb(255, 0, 0)'; // Red
+        }
+
+        var lineStyle = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: color,
+                width: 10
+            })
+        });
+
+        // Apply the style to the line feature
+        lineFeature.setStyle(lineStyle);
+
+        // Add the line feature to the array
+        lineFeatures.push(lineFeature);
+        }
+
+        // Create a vector source and layer using the line features
+        var vectorSource = new ol.source.Vector({
+            features: lineFeatures
+        });
+
+        var vectorLayer = new ol.layer.Vector({
+            source: vectorSource
+        });
+
+        // Add the vector layer to the map
+        map.addLayer(vectorLayer);
     }
 
-    console.log(lineCoordinates);
-    map.getView().setCenter(lineCoordinates[0]);
+    initialMapDraw();
 
-    // Create an array to hold the line features
-    var lineFeatures = [];
+    function updateMap(data){
+        map.getView().setZoom(18);
+        // Convert latitude and longitude arrays to line coordinates
+        var lineCoordinates = [];
+        var ratingOfSections = [];
+        for (var i = 0; i < data.length; i++) {
+            var coordinate = ol.proj.fromLonLat([data[i].longitude, data[i].latitude]);
+            lineCoordinates.push(coordinate);
+            ratingOfSections.push(data[i].rating);
+        }
 
-    for (var i = 0; i < lineCoordinates.length - 1; i++) {
-    // Create a line feature for each line segment
-    var lineFeature = new ol.Feature({
-        geometry: new ol.geom.LineString([
-            lineCoordinates[i],
-            lineCoordinates[i + 1]
-        ])
-    });
+        console.log(lineCoordinates);
+        map.getView().setCenter(lineCoordinates[lineCoordinates.length-1]);
 
-    // Create a style for the line feature based on the rating
-    var rating = ratingOfSections[i];
-    var color;
-    if (rating >= 0.66) {
-        color = 'rgb(0, 255, 0)'; // Green
-    } else if (rating >= 0.33) {
-        color = 'rgb(255, 255, 0)'; // Yellow
-    } else {
-        color = 'rgb(255, 0, 0)'; // Red
+        // Create an array to hold the line features
+        var lineFeatures = [];
+
+        for (var i = 0; i < lineCoordinates.length - 1; i++) {
+        // Create a line feature for each line segment
+            var lineFeature = new ol.Feature({
+                geometry: new ol.geom.LineString([
+                    lineCoordinates[i],
+                    lineCoordinates[i + 1]
+                ])
+            });
+
+        
+
+        // Create a style for the line feature based on the rating
+        var rating = ratingOfSections[i];
+        console.log("Rating: ", rating);
+        var color;
+        if (rating >= 66) {
+            color = 'rgb(0, 255, 0)'; // Green
+        } else if (rating >= 33) {
+            color = 'rgb(255, 255, 0)'; // Yellow
+        } else {
+            color = 'rgb(255, 0, 0)'; // Red
+        }
+
+        var lineStyle = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: color,
+                width: 10
+            })
+        });
+
+        // Apply the style to the line feature
+        lineFeature.setStyle(lineStyle);
+
+        // Add the line feature to the array
+        lineFeatures.push(lineFeature);
+        }
+
+        // Create a vector source and layer using the line features
+        var vectorSource = new ol.source.Vector({
+            features: lineFeatures
+        });
+
+        var vectorLayer = new ol.layer.Vector({
+            source: vectorSource
+        });
+
+        // Add the vector layer to the map
+        map.addLayer(vectorLayer);
     }
 
-    var lineStyle = new ol.style.Style({
-        stroke: new ol.style.Stroke({
-            color: color,
-            width: 10
-        })
-    });
+    //updateMap();
 
-    // Apply the style to the line feature
-    lineFeature.setStyle(lineStyle);
+     function fetchDataAndUpdateMap() {
+    // Retrieve the ID from the URL
+        var id = window.location.pathname.split('/').pop();
 
-    // Add the line feature to the array
-    lineFeatures.push(lineFeature);
-    }
-
-    // Create a vector source and layer using the line features
-    var vectorSource = new ol.source.Vector({
-        features: lineFeatures
-    });
-
-    var vectorLayer = new ol.layer.Vector({
-        source: vectorSource
-    });
-
-    // Add the vector layer to the map
-    map.addLayer(vectorLayer);
-
-    // Get the user's current location
-    /*if ("geolocation" in navigator) {
-
-        navigator.geolocation.getCurrentPosition(function (position) {
-            // Update the map view with the user's location
-            var userLocation = ol.proj.fromLonLat([position.coords.longitude, position.coords.latitude]) ?? ol.proj.fromLonLat(46.55947, 15.63293);
-            map.getView().setZoom(14);
-
-            // Convert latitude and longitude arrays to line coordinates
-            var lineCoordinates = [];
-            for (var i = 0; i < latitudes.length; i++) {
-                var coordinate = ol.proj.fromLonLat([longitudes[i], latitudes[i]]);
-                lineCoordinates.push(coordinate);
+        // Make an AJAX request to fetch new data from the server
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'json/' + id, true); // Modify the URL to match your server-side endpoint
+        xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+            console.log(xhr.responseText); // Log the response text
+            var newData = JSON.parse(xhr.responseText);
+            updateMap(newData);
+            } else {
+            console.error('Failed to fetch new data');
             }
+        }
+        };
+        xhr.send();
+  }
 
-            console.log(lineCoordinates);
-            map.getView().setCenter(lineCoordinates[0]);
-
-            // Create an array to hold the line features
-            var lineFeatures = [];
-
-            for (var i = 0; i < lineCoordinates.length - 1; i++) {
-                // Create a line feature for each line segment
-                var lineFeature = new ol.Feature({
-                    geometry: new ol.geom.LineString([
-                        lineCoordinates[i],
-                        lineCoordinates[i + 1]
-                    ])
-                });
-
-                // Create a style for the line feature based on the rating
-                var rating = ratingOfSections[i];
-                var color;
-                if (rating >= 0.66) {
-                    color = 'rgb(0, 255, 0)'; // Green
-                } else if (rating >= 0.33) {
-                    color = 'rgb(255, 255, 0)'; // Yellow
-                } else {
-                    color = 'rgb(255, 0, 0)'; // Red
-                }
-
-                var lineStyle = new ol.style.Style({
-                    stroke: new ol.style.Stroke({
-                        color: color,
-                        width: 10
-                    })
-                });
-
-                // Apply the style to the line feature
-                lineFeature.setStyle(lineStyle);
-
-                // Add the line feature to the array
-                lineFeatures.push(lineFeature);
-            }
-
-            // Create a vector source and layer using the line features
-            var vectorSource = new ol.source.Vector({
-                features: lineFeatures
-            });
-
-            var vectorLayer = new ol.layer.Vector({
-                source: vectorSource
-            });
-
-            // Add the vector layer to the map
-            map.addLayer(vectorLayer);
-
-
-            //TODO FIX NOT SHOWING THE LAST SECTION IDK WHY
-
-            /*
-            // Create an array to hold the line features
-            var lineFeatures = [];
-
-            for (var i = 0; i < lineCoordinates.length; i++) {
-                console.log('i:', i);
-                console.log('lineCoordinates[i]:', lineCoordinates[i]);
-                
-                if (i < lineCoordinates.length - 1) {
-                    // Create a line feature for each line segment
-                    var lineFeature = new ol.Feature({
-                        geometry: new ol.geom.LineString([
-                            lineCoordinates[i],
-                            lineCoordinates[i + 1]
-                        ])
-                    });
-
-                    // Create a style for the line feature based on the rating
-                    var rating = ratingOfSections[i];
-                    var color;
-                    if (rating >= 0.66) {
-                        color = 'rgb(0, 255, 0)'; // Green
-                    } else if (rating >= 0.33) {
-                        color = 'rgb(255, 255, 0)'; // Yellow
-                    } else {
-                        color = 'rgb(255, 0, 0)'; // Red
-                    }
-
-                    var lineStyle = new ol.style.Style({
-                        stroke: new ol.style.Stroke({
-                            color: color,
-                            width: 2
-                        })
-                    });
-
-                    // Apply the style to the line feature
-                    lineFeature.setStyle(lineStyle);
-
-                    // Add the line feature to the array
-                    lineFeatures.push(lineFeature);
-                }
-            }
-
-            // Create a vector source and layer using the line features
-            var vectorSource = new ol.source.Vector({
-                features: lineFeatures
-            });
-
-            var vectorLayer = new ol.layer.Vector({
-                source: vectorSource
-            });
-
-            // Add the vector layer to the map
-            map.addLayer(vectorLayer);
-
-
-        },
-        function(error) {
-                // Handle geolocation error
-                console.error('Error getting geolocation:', error);
-            });
-
-    }*/
+  // Example of updating the map with new data every 5 seconds
+  setInterval(fetchDataAndUpdateMap, 10050);
+    
 </script>

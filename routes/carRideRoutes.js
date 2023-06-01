@@ -11,6 +11,8 @@ router.use(methodOverride('_method'));
  */
 router.get('/', carRideController.list);
 router.get('/getLongLat/:id', carRideController.retrieveLongLatFromCarRide);
+router.get('/getLongLat/json/:id', carRideController.retrieveLongLatFromCarRideJSON);
+
 //router.get('/mapShowcase', carRideController.showMapShowcase);
 
 /*
