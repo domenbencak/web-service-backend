@@ -19,6 +19,7 @@ router.get('/', async function(req, res, next) {
       }));
 
       // dobim username userja
+      console.log(carRide.user);
       const user = await userModel.findById(carRide.user).exec();
 
       return {
