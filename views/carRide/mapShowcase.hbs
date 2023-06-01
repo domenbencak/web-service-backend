@@ -153,6 +153,8 @@
 
     initialMapDraw();
 
+   var currentLocationLayer; 
+
     function updateMap(data){
         //map.getView().setZoom(14);
 
@@ -273,7 +275,7 @@
             features: [currentLocationMarker],
         });
 
-        var currentLocationLayer = new ol.layer.Vector({
+        currentLocationLayer = new ol.layer.Vector({
             source: currentLocationSource,
         });
 
