@@ -14,25 +14,83 @@
   <script src="https://openlayers.org/en/v6.6.1/build/ol.js"></script>
   <!-- Add WebSocket script -->
   <script src="/websocket-client.js"></script>
+  <!-- Font-awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
-<body>
-  <nav>
-    <ul>
-      <!--<li><a href='/'>Domov</a></li>-->
-      <li><a href='/'>Domov</a></li>
-      {{#if session.userId}}
-      <li><a href='/deviceData/publish'>Dodaj deviceData</a></li>
-      <li><a href='/deviceData'>List deviceData</a></li>
-      <li><a href='/user/profile'>Profil</a></li>
-      <li><a href='/user/logout'>Odjava</a></li>
-      {{else}}
-      <li><a href='/user/login'>Prijava</a></li>
-      <li><a href='/user/register'>Registracija</a></li>
-      {{/if}}
-    </ul>
-  </nav>
+<body style="padding: 0px">
+  <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <!-- Container wrapper -->
+  <div class="container-fluid">
+    <!-- Navbar brand -->
+    <li class="navbar-brand" href="#">VP1</li>
+
+    <!-- Toggle button -->
+    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+      data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+      aria-label="Toggle navigation">
+      <i class="fas fa-bars text-light"></i>
+    </button>
+
+    <!-- Collapsible wrapper -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <!-- Left links -->
+      <ul class="navbar-nav me-auto d-flex flex-row mt-3 mt-lg-0">
+        <li class="nav-item text-center mx-2 mx-lg-1">
+          <a class="nav-link active" aria-current="page" href="/">
+            <div>
+              <i class="fa-solid fa-house"></i>
+            </div>
+            Domov
+          </a>
+        </li>
+        {{#if session.userId}}
+        <li class="nav-item text-center mx-2 mx-lg-1">
+          <a class="nav-link active" href="/user/profile">
+            <div>
+              <i class="fa-solid fa-user"></i>
+            </div>
+            Profil
+          </a>
+        </li>
+        <li class="nav-item text-center mx-2 mx-lg-1">
+          <a class="nav-link active" aria-disabled="true" href="/user/logout">
+            <div>
+              <i class="fa-solid fa-right-from-bracket"></i>
+            </div>
+            Odjava
+          </a>
+        </li>
+        {{else}}
+        <li class="nav-item text-center mx-2 mx-lg-1">
+          <a class="nav-link active" aria-disabled="true" href="/user/login">
+            <div>
+              <i class="fa-solid fa-right-to-bracket"></i>
+            </div>
+            Prijava
+          </a>
+        </li>
+        <li class="nav-item text-center mx-2 mx-lg-1">
+          <a class="nav-link active" aria-disabled="true" href="/user/register">
+            <div>
+              <i class="fa-solid fa-user-plus"></i>
+            </div>
+            Registracija
+          </a>
+        </li>
+
+        {{/if}}
+      </ul>
+    </div>
+    <!-- Collapsible wrapper -->
+  </div>
+  <!-- Container wrapper -->
+</nav>
+<!-- Navbar -->
+<div style="padding: 50px">
   {{{body}}}
+</div>
 </body>
 
 </html>

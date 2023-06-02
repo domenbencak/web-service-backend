@@ -59,3 +59,12 @@ a {
   color: white;
   padding: 10px;
 }
+
+button{
+  margin: 5px !important;
+}
+
+.btn {
+  padding: .55rem 1.5rem .45rem;
+}
+

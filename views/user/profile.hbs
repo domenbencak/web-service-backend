@@ -1,9 +1,13 @@
+<link rel='stylesheet' href='../../public/stylesheets/table_style.css'/>
 
-<h1>Profil uporabnika</h1>
-<h2>Ime: </h2>
-<p>{{user.username}}</p>
-<h2>Mail:</h2>
-<p>{{user.email}}</p>
+<div class="card mb-4">
+    <div class="card-body text-center">
+      <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+      class="rounded-circle img-fluid" style="width: 150px;">
+      <h5 class="my-3"><p>{{user.username}}</p></h5>
+      <p class="text-muted mb-1">{{user.email}}</p>
+  </div>
+</div>
 
 <h2>Your Car Rides:</h2>
 {{#if carRides.length}}
