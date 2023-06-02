@@ -288,6 +288,7 @@
     }
 
     //updateMap();
+    var preivousLength = 0;
 
      function fetchDataAndUpdateMap() {
     // Retrieve the ID from the URL
@@ -304,7 +305,12 @@
                     if (xhr.status === 200) {
                         console.log(xhr.responseText); // Log the response text
                         var newData = JSON.parse(xhr.responseText);
-                        updateMap(newData);
+
+                        var newLength = newData.length;
+                        if (newLength !== preivousLength){
+                            updateMap(newData);
+                            preivousLength = newLength;
+                        }
                     } else {
                     console.error('Failed to fetch new data');
                     }
