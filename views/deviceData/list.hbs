@@ -1,10 +1,10 @@
-<h1>Device Data:</h1>
-
 {{#each deviceDatas}}
-  <div>
-    <p>Device Data:</p>
+<div class="device-data-box">
+  <div class="rounded-form">
+    <h2 class="center-text">Device Data:</h2>
     <ul>
       <li>
+        <h4>ACCELEROMETER VALUES:</h4>
         <div class="accordion">
           <span class="arrow"></span>
           <span class="axis-title" onclick="toggleAccelerometerValues(this)">Accelerometer X</span>
@@ -38,6 +38,7 @@
         </ul>
       </li>
       <li>
+        <h4>GYROSCOPE VALUES:</h4>
         <div class="accordion">
           <span class="arrow"></span>
           <span class="axis-title" onclick="toggleGyroscopeValues(this)">Gyroscope X</span>
@@ -71,14 +72,13 @@
         </ul>
       </li>
     </ul>
-    
-    <p>Latitude: {{this.latitude}}</p>
-    <p>Longitude: {{this.longitude}}</p>
-    <p>User: {{this.user.username}}</p>
-    <p>Rating: {{this.rating}}</p>
-    <p>Timestamp: {{this.timestamp}}</p>
-    <hr />
+
+    <h4>Latitude: {{this.latitude}}</h4>
+    <h4>Longitude: {{this.longitude}}</h4>
+    <h4>Rating: {{this.rating}}</h4>
+    <h4>Timestamp: {{this.timestamp}}</h4>
   </div>
+</div>
 {{/each}}
 
 <style>
@@ -103,10 +103,32 @@
     list-style-type: none;
   }
 
+  .device-data-box {
+    border: 1px solid black;
+    margin-bottom: 20px;
+    padding: 10px;
+    margin-top: 15px;
+  }
+
+  .rounded-form {
+    border-radius: 0;
+    padding: 40px;
+    background-color: #ffffff;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .center-text {
+    text-align: center;
+    text-transform: uppercase;
+    color: #333333;
+    margin-bottom: 40px;
+  }
+
   li{
     list-style-type: none;
   }
 </style>
+
 
 <script>
   function toggleAccelerometerValues(element) {
