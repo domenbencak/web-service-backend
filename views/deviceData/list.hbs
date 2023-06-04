@@ -1,8 +1,10 @@
+
+
 {{#each deviceDatas}}
 <div class="device-data-box">
   <div class="rounded-form">
     <h2 class="center-text">Device Data:</h2>
-        <h4 class="title-values">ACCELEROMETER VALUES:</h4>
+        <h4 class="title-values">ACCELEROMETER VREDNOSTI:</h4>
         <div class="accordion">
           <span class="arrow"></span>
           <span class="axis-title-x" onclick="toggleAccelerometerValues(this)">Accelerometer X</span>
@@ -36,7 +38,7 @@
         </ul>
       </li>
       <li>
-        <h4 class="title-values">GYROSCOPE VALUES:</h4>
+        <h4 class="title-values">GYROSCOPE VREDNOSTI:</h4>
         <div class="accordion">
           <span class="arrow"></span>
           <span class="axis-title-x" onclick="toggleGyroscopeValues(this)">Gyroscope X</span>
@@ -69,13 +71,13 @@
           {{/each}}
         </ul>
 
-    <h4 class="title-values">COORDINATES:</h4>
+    <h4 class="title-values">KORDINATI:</h4>
         <h5 class="lat-lon">Latitude: <span class="lat-lon-value">{{this.latitude}}</span></h5>
         <h5 class="lat-lon">Longitude: <span class="lat-lon-value">{{this.longitude}}</span></h5>
 
-    <h4 class="title-values">RATING: <span class="rating">{{this.rating}}</span></h4>
-    <h4>Timestamp: {{this.timestamp}}</h4>
-  </div>
+    <h4 class="title-values">OCENA: <span class="rating">{{this.rating}}</span></h4>
+    <h4 class="title-values">ČAS: <span class="timestamp">{{this.timestamp}}</span></h4>
+      </div>
 </div>
 {{/each}}
 
@@ -91,102 +93,86 @@
     transition: transform 0.3s;
     transform: rotate(0deg);
   }
-
   .open .arrow {
     transform: rotate(90deg);
   }
-
   ul.accelerometer-values,
   ul.gyroscope-values {
     list-style-type: none;
   }
-
   .device-data-box {
     border: 1px solid black;
     margin-bottom: 20px;
     padding: 10px;
     margin-top: 15px;
   }
-
   .rounded-form {
     border-radius: 0;
     padding: 40px;
     background-color: #ffffff;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
   }
-
   .center-text {
     text-align: center;
     text-transform: uppercase;
     color: #333333;
     margin-bottom: 40px;
   }
-
   li {
     list-style-type: none;
   }
-
   .accelerometer-values .gyroscope-values li {
     font-weight: 400;
   }
-
   .axis-title-x {
     color: red;
     font-weight: 600;
   }
-
   .axis-title-y {
     color: green;
     font-weight: 600;
   }
-
   .axis-title-z {
     color: blue;
     font-weight: 600;
   }
-
   .title-values {
     font-weight: 800;
   }
-
   .lat-lon {
     color: purple;
     font-weight: 600;
   }
-
   .lat-lon-value {
     color: black;
     font-weight: 400;
   }
-
   .rating {
     font-weight: 800;
     display: inline-block;
   }
-
-  /* Styles for rating colors */
   .rating.dark-red {
     color: darkred;
     font-weight: 600;
   }
-
   .rating.red {
     color: red;
     font-weight: 600;
   }
-
   .rating.yellow {
     color: yellow;
     font-weight: 600;
   }
-
   .rating.green {
     color: green;
     font-weight: 600;
   }
-
   .rating.dark-green {
     color: darkgreen;
+    font-weight: 600;
+  }
+  .timestamp{
+    color: chocolate;
     font-weight: 600;
   }
 </style>
@@ -212,6 +198,41 @@
     });
   }
 
+function formatTimestamps() {
+  const timestamps = document.querySelectorAll('.timestamp');
+  timestamps.forEach(timestamp => {
+    const originalTimestamp = timestamp.innerText;
+    const formattedTimestamp = formatTimestamp(originalTimestamp);
+    timestamp.innerText = formattedTimestamp;
+  });
+}
+
+function formatTimestamp(timestamp) {
+  const dateObj = new Date(timestamp);
+  
+  const days = ['NEDELJA', 'PONEDELJEK', 'TOREK', 'SREDA', 'ČETRTEK', 'PETEK', 'SOBOTA'];
+  const day = days[dateObj.getDay()];
+  
+  const month = dateObj.getMonth() + 1;
+  const year = dateObj.getFullYear();
+  
+  const formattedTimestamp = `${day}, ${dateObj.getDate()}.${month}.${year} - ${formatTime(dateObj)}`;
+  
+  return formattedTimestamp;
+}
+
+function formatTime(dateObj) {
+  const hours = dateObj.getHours();
+  const minutes = dateObj.getMinutes();
+  
+  const formattedHours = hours.toString().padStart(2, '0');
+  const formattedMinutes = minutes.toString().padStart(2, '0');
+  
+  const formattedTime = `${formattedHours}:${formattedMinutes}`;
+  
+  return formattedTime;
+}
+
   // JavaScript logic to change rating color based on its value
   const ratings = document.querySelectorAll('.rating');
   ratings.forEach(rating => {
@@ -228,4 +249,6 @@
       rating.classList.add('dark-green');
     }
   });
+
+  formatTimestamps();
 </script>
