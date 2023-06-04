@@ -2,12 +2,10 @@
 <div class="device-data-box">
   <div class="rounded-form">
     <h2 class="center-text">Device Data:</h2>
-    <ul>
-      <li>
-        <h4>ACCELEROMETER VALUES:</h4>
+        <h4 class="title-values">ACCELEROMETER VALUES:</h4>
         <div class="accordion">
           <span class="arrow"></span>
-          <span class="axis-title" onclick="toggleAccelerometerValues(this)">Accelerometer X</span>
+          <span class="axis-title-x" onclick="toggleAccelerometerValues(this)">Accelerometer X</span>
         </div>
         <ul class="accelerometer-values accelerometer-x">
           {{#each this.accelerometerX}}
@@ -18,7 +16,7 @@
       <li>
         <div class="accordion">
           <span class="arrow"></span>
-          <span class="axis-title" onclick="toggleAccelerometerValues(this)">Accelerometer Y</span>
+          <span class="axis-title-y" onclick="toggleAccelerometerValues(this)">Accelerometer Y</span>
         </div>
         <ul class="accelerometer-values accelerometer-y">
           {{#each this.accelerometerY}}
@@ -29,7 +27,7 @@
       <li>
         <div class="accordion">
           <span class="arrow"></span>
-          <span class="axis-title" onclick="toggleAccelerometerValues(this)">Accelerometer Z</span>
+          <span class="axis-title-z" onclick="toggleAccelerometerValues(this)">Accelerometer Z</span>
         </div>
         <ul class="accelerometer-values accelerometer-z">
           {{#each this.accelerometerZ}}
@@ -38,10 +36,10 @@
         </ul>
       </li>
       <li>
-        <h4>GYROSCOPE VALUES:</h4>
+        <h4 class="title-values">GYROSCOPE VALUES:</h4>
         <div class="accordion">
           <span class="arrow"></span>
-          <span class="axis-title" onclick="toggleGyroscopeValues(this)">Gyroscope X</span>
+          <span class="axis-title-x" onclick="toggleGyroscopeValues(this)">Gyroscope X</span>
         </div>
         <ul class="gyroscope-values gyroscope-x">
           {{#each this.gyroscopeX}}
@@ -52,7 +50,7 @@
       <li>
         <div class="accordion">
           <span class="arrow"></span>
-          <span class="axis-title" onclick="toggleGyroscopeValues(this)">Gyroscope Y</span>
+          <span class="axis-title-y" onclick="toggleGyroscopeValues(this)">Gyroscope Y</span>
         </div>
         <ul class="gyroscope-values gyroscope-y">
           {{#each this.gyroscopeY}}
@@ -63,15 +61,13 @@
       <li>
         <div class="accordion">
           <span class="arrow"></span>
-          <span class="axis-title" onclick="toggleGyroscopeValues(this)">Gyroscope Z</span>
+          <span class="axis-title-z" onclick="toggleGyroscopeValues(this)">Gyroscope Z</span>
         </div>
         <ul class="gyroscope-values gyroscope-z">
           {{#each this.gyroscopeZ}}
             <li style="display: none;">{{this}}</li>
           {{/each}}
         </ul>
-      </li>
-    </ul>
 
     <h4>Latitude: {{this.latitude}}</h4>
     <h4>Longitude: {{this.longitude}}</h4>
@@ -126,6 +122,29 @@
 
   li{
     list-style-type: none;
+  }
+
+  .accelerometer-values .gyroscope-values li {
+    font-weight: 400;
+  }
+
+  .axis-title-x {
+    color: red;
+    font-weight: 600;
+  }
+
+  .axis-title-y {
+    color: green;
+    font-weight: 600;
+  }
+
+  .axis-title-z {
+    color: blue;
+    font-weight: 600;
+  }
+
+  .title-values{
+    font-weight: 800;
   }
 </style>
 

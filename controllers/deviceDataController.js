@@ -2,6 +2,7 @@ const session = require('express-session');
 var DevicedataModel = require('../models/deviceDataModel.js');
 
 const mongoose = require('mongoose');
+const moment = require('moment');
 
 /**
  * deviceDataController.js
