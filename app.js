@@ -7,7 +7,7 @@ var WebSocket = require('ws');
 
 // vključimo mongoose in ga povežemo z MongoDB
 var mongoose = require('mongoose');
-var mongoDB = "mongodb://127.0.0.1/RAI-projekt";
+var mongoDB = "mongodb://mongodb-container/RAI-projekt";
 mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
@@ -20,7 +20,7 @@ var app = express();
 function setUpServer() {
   return new Promise(function (resolve, reject) {
     var server = app.listen(3000, function () {
-      console.log('Server listening on port 3000');
+      console.log('Server listening on port 3001');
       var wss = new WebSocket.Server({ server });
 
       var connectedClients = [];
