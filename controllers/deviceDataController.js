@@ -15,7 +15,11 @@ module.exports = {
      */
     list: async function (req, res) {
         try {
-          const deviceDatas = await DevicedataModel.find().populate('user');
+          const deviceDatas = await DevicedataModel.find().populate({
+            path: 'user',
+            select: 'username'
+          }).lean();
+      
           const reversedDeviceDatas = deviceDatas.reverse();
           return res.render('deviceData/list', { deviceDatas: reversedDeviceDatas });
         } catch (err) {
