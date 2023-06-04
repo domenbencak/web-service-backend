@@ -7,7 +7,7 @@ var WebSocket = require('ws');
 
 // vključimo mongoose in ga povežemo z MongoDB
 var mongoose = require('mongoose');
-var mongoDB = "mongodb+srv://dede:dede123@cluster.iepsv8l.mongodb.net/vaja3";
+var mongoDB = "mongodb://127.0.0.1/RAI-projekt";
 mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
@@ -15,6 +15,8 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 var app = express();
 
+
+// Create a function to set up the server and WebSocket logic
 function setUpServer() {
   return new Promise(function (resolve, reject) {
     var server = app.listen(3000, function () {
@@ -122,11 +124,6 @@ var wss, tt = setUpServer()
     app.use('/deviceData', deviceDataRouter);
     app.use('/carRide', carRideRouter);
     app.use('/carRideRating', carRideRatingRouter);
-    app.use('/', indexRouter);
-    app.use('/user', userRouter);
-    app.use('/deviceData', deviceDataRouter);
-    app.use('/carRide', carRideRouter);
-    app.use('/carRideRating', carRideRatingRouter);
 
     app.use(express.static(path.join(__dirname, 'public')));
     app.use(express.static(__dirname));
@@ -136,20 +133,7 @@ var wss, tt = setUpServer()
     app.use(function(req, res, next) {
       next(createError(404));
     });
-    app.use(express.static(path.join(__dirname, 'public')));
-    app.use(express.static(__dirname));
 
-
-    // catch 404 and forward to error handler
-    app.use(function(req, res, next) {
-      next(createError(404));
-    });
-
-    // error handler
-    app.use(function(err, req, res, next) {
-      // set locals, only providing error in development
-      res.locals.message = err.message;
-      res.locals.error = req.app.get('env') === 'development' ? err : {};
     // error handler
     app.use(function(err, req, res, next) {
       // set locals, only providing error in development
@@ -176,5 +160,5 @@ async function getClients() {
   const clients = await wss.clients;
   return clients;
 }
-  }
 
+module.exports = { app, wss, tt: getClients };

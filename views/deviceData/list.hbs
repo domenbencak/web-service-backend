@@ -11,7 +11,7 @@
         </div>
         <ul class="accelerometer-values accelerometer-x">
           {{#each this.accelerometerX}}
-            <li>{{this}}</li>
+            <li style="display: none;">{{this}}</li>
           {{/each}}
         </ul>
       </li>
@@ -22,7 +22,7 @@
         </div>
         <ul class="accelerometer-values accelerometer-y">
           {{#each this.accelerometerY}}
-            <li>{{this}}</li>
+            <li style="display: none;">{{this}}</li>
           {{/each}}
         </ul>
       </li>
@@ -33,40 +33,40 @@
         </div>
         <ul class="accelerometer-values accelerometer-z">
           {{#each this.accelerometerZ}}
-            <li>{{this}}</li>
+            <li style="display: none;">{{this}}</li>
           {{/each}}
         </ul>
       </li>
       <li>
         <div class="accordion">
           <span class="arrow"></span>
-          <span class="axis-title">Gyroscope X</span>
+          <span class="axis-title" onclick="toggleGyroscopeValues(this)">Gyroscope X</span>
         </div>
         <ul class="gyroscope-values gyroscope-x">
           {{#each this.gyroscopeX}}
-            <li>{{this}}</li>
+            <li style="display: none;">{{this}}</li>
           {{/each}}
         </ul>
       </li>
       <li>
         <div class="accordion">
           <span class="arrow"></span>
-          <span class="axis-title">Gyroscope Y</span>
+          <span class="axis-title" onclick="toggleGyroscopeValues(this)">Gyroscope Y</span>
         </div>
         <ul class="gyroscope-values gyroscope-y">
           {{#each this.gyroscopeY}}
-            <li>{{this}}</li>
+            <li style="display: none;">{{this}}</li>
           {{/each}}
         </ul>
       </li>
       <li>
         <div class="accordion">
           <span class="arrow"></span>
-          <span class="axis-title">Gyroscope Z</span>
+          <span class="axis-title" onclick="toggleGyroscopeValues(this)">Gyroscope Z</span>
         </div>
         <ul class="gyroscope-values gyroscope-z">
           {{#each this.gyroscopeZ}}
-            <li>{{this}}</li>
+            <li style="display: none;">{{this}}</li>
           {{/each}}
         </ul>
       </li>
@@ -80,3 +80,25 @@
     <hr />
   </div>
 {{/each}}
+
+<script>
+  function toggleAccelerometerValues(element) {
+    const axisValues = element.parentElement.nextElementSibling;
+    const arrow = element.previousElementSibling;
+    arrow.classList.toggle('open');
+    const lis = axisValues.querySelectorAll('li');
+    lis.forEach(li => {
+      li.style.display = li.style.display === 'none' ? 'list-item' : 'none';
+    });
+  }
+  
+  function toggleGyroscopeValues(element) {
+    const axisValues = element.parentElement.nextElementSibling;
+    const arrow = element.previousElementSibling;
+    arrow.classList.toggle('open');
+    const lis = axisValues.querySelectorAll('li');
+    lis.forEach(li => {
+      li.style.display = li.style.display === 'none' ? 'list-item' : 'none';
+    });
+  }
+</script>
