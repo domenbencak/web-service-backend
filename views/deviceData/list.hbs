@@ -69,8 +69,10 @@
           {{/each}}
         </ul>
 
-    <h4>Latitude: {{this.latitude}}</h4>
-    <h4>Longitude: {{this.longitude}}</h4>
+    <h4 class="title-values">COORDINATES:</h4>
+        <h5 class="lat-lon">Latitude: <span class="lat-lon-value">{{this.latitude}}</span></h5>
+        <h5 class="lat-lon">Longitude: <span class="lat-lon-value">{{this.longitude}}</span></h5>
+
     <h4>Rating: {{this.rating}}</h4>
     <h4>Timestamp: {{this.timestamp}}</h4>
   </div>
@@ -145,6 +147,16 @@
 
   .title-values{
     font-weight: 800;
+  }
+
+  .lat-lon{
+    color: purple;
+    font-weight: 600;
+  }
+
+  .lat-lon-value{
+    color: black;
+    font-weight: 400;
   }
 </style>
 
