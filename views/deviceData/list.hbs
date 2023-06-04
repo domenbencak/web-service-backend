@@ -73,7 +73,7 @@
         <h5 class="lat-lon">Latitude: <span class="lat-lon-value">{{this.latitude}}</span></h5>
         <h5 class="lat-lon">Longitude: <span class="lat-lon-value">{{this.longitude}}</span></h5>
 
-    <h4>Rating: {{this.rating}}</h4>
+    <h4 class="title-values">RATING: <span class="rating">{{this.rating}}</span></h4>
     <h4>Timestamp: {{this.timestamp}}</h4>
   </div>
 </div>
@@ -122,7 +122,7 @@
     margin-bottom: 40px;
   }
 
-  li{
+  li {
     list-style-type: none;
   }
 
@@ -145,21 +145,51 @@
     font-weight: 600;
   }
 
-  .title-values{
+  .title-values {
     font-weight: 800;
   }
 
-  .lat-lon{
+  .lat-lon {
     color: purple;
     font-weight: 600;
   }
 
-  .lat-lon-value{
+  .lat-lon-value {
     color: black;
     font-weight: 400;
   }
-</style>
 
+  .rating {
+    font-weight: 800;
+    display: inline-block;
+  }
+
+  /* Styles for rating colors */
+  .rating.dark-red {
+    color: darkred;
+    font-weight: 600;
+  }
+
+  .rating.red {
+    color: red;
+    font-weight: 600;
+  }
+
+  .rating.yellow {
+    color: yellow;
+    font-weight: 600;
+  }
+
+  .rating.green {
+    color: green;
+    font-weight: 600;
+  }
+
+  .rating.dark-green {
+    color: darkgreen;
+    font-weight: 600;
+  }
+</style>
 
 <script>
   function toggleAccelerometerValues(element) {
@@ -181,5 +211,21 @@
       li.style.display = li.style.display === 'none' ? 'list-item' : 'none';
     });
   }
-  
+
+  // JavaScript logic to change rating color based on its value
+  const ratings = document.querySelectorAll('.rating');
+  ratings.forEach(rating => {
+    const value = parseInt(rating.innerText);
+    if (value >= 1 && value <= 25) {
+      rating.classList.add('dark-red');
+    } else if (value >= 26 && value <= 50) {
+      rating.classList.add('red');
+    } else if (value >= 51 && value <= 75) {
+      rating.classList.add('yellow');
+    } else if (value >= 76 && value <= 90) {
+      rating.classList.add('green');
+    } else if (value >= 91 && value <= 100) {
+      rating.classList.add('dark-green');
+    }
+  });
 </script>
