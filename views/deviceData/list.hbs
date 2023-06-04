@@ -81,21 +81,48 @@
   </div>
 {{/each}}
 
+<style>
+  .arrow {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-right: 5px;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid #000;
+    transition: transform 0.3s;
+    transform: rotate(0deg);
+  }
+
+  .open .arrow {
+    transform: rotate(90deg);
+  }
+
+  ul.accelerometer-values,
+  ul.gyroscope-values {
+    list-style-type: none;
+  }
+
+  li{
+    list-style-type: none;
+  }
+</style>
+
 <script>
   function toggleAccelerometerValues(element) {
     const axisValues = element.parentElement.nextElementSibling;
-    const arrow = element.previousElementSibling;
-    arrow.classList.toggle('open');
+    const arrow = element.querySelector('.arrow');
+    element.parentElement.classList.toggle('open');
     const lis = axisValues.querySelectorAll('li');
     lis.forEach(li => {
       li.style.display = li.style.display === 'none' ? 'list-item' : 'none';
     });
   }
-  
+
   function toggleGyroscopeValues(element) {
     const axisValues = element.parentElement.nextElementSibling;
-    const arrow = element.previousElementSibling;
-    arrow.classList.toggle('open');
+    const arrow = element.querySelector('.arrow');
+    element.parentElement.classList.toggle('open');
     const lis = axisValues.querySelectorAll('li');
     lis.forEach(li => {
       li.style.display = li.style.display === 'none' ? 'list-item' : 'none';
