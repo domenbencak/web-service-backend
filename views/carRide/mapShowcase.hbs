@@ -10,7 +10,7 @@
     <title>Car Ride Data</title>
   </head>
   <body>
-    <!--<h1>Car Ride Data</h1>-->
+    <h1>Car Ride Data</h1>
     <!--<ul>-->
       {{#each deviceData}}
       <!--<li>Latitude: {{this.latitude}}, Longitude: {{this.longitude}}, Rating: {{this.rating}}</li>-->
@@ -29,8 +29,7 @@
 
 <script src="https://openlayers.org/en/v6.6.1/build/ol.js"></script>
 <script>
-    let isCentered = true;
-     var lastCoordinate;
+
     // Create a map instance
     var map = new ol.Map({
         target: 'map',
@@ -43,52 +42,16 @@
             center: ol.proj.fromLonLat([0, 0]),
             zoom: 2,
         }),
-        controls: ol.control.defaults({ attribution: false }),
+        controls: ol.control.defaults({ attribution: false })
     });
 
-    // Custom control button
-    var button = document.createElement('button');
-    button.innerHTML = 'Toggle Centering';
-    button.classList.add('custom-button');
-
-    // Define the button click event handler
-    button.addEventListener('click', function () {
-        isCentered = !isCentered;
-        //map.getView().setCenter(ol.proj.fromLonLat(lastCoordinate));
-    });
-
-    // Create a custom control element
-    var customControl = new ol.control.Control({
-        element: button,
-        target: 'map',
-    });
-
-    // Add the custom control to the map
-    map.addControl(customControl);
-
-        // Function to center the map
-        function centerMap() {
-            isCentered = !isCentered;
-            //map.getView().setCenter(ol.proj.fromLonLat(lastCoordinate));
-        }
-
-       // Event listener for moveend event
-        map.on('moveend', function () {
-            var newCenter = map.getView().getCenter();
-            if (!ol.proj.transform(originalCenter, 'EPSG:3857', 'EPSG:4326').every((val, idx) => val === ol.proj.transform(newCenter, 'EPSG:3857', 'EPSG:4326')[idx])) {
-                isCentered = false;
-            }
-        });
-
-    function initialMapDraw(){
-        map.getView().setZoom(14);
-        // Convert latitude and longitude arrays to line coordinates
-
-        var lineCoordinates = [];
-        for (var i = 0; i < latitudes.length; i++) {
-            var coordinate = ol.proj.fromLonLat([longitudes[i], latitudes[i]]);
-            lineCoordinates.push(coordinate);
-        }
+    map.getView().setZoom(14);
+    // Convert latitude and longitude arrays to line coordinates
+    var lineCoordinates = [];
+    for (var i = 0; i < latitudes.length; i++) {
+        var coordinate = ol.proj.fromLonLat([longitudes[i], latitudes[i]]);
+        lineCoordinates.push(coordinate);
+    }
 
         console.log(lineCoordinates);
         map.getView().setCenter(lineCoordinates[lineCoordinates.length-1]);
@@ -157,29 +120,23 @@
             source: vectorSource
         });
 
-        // Add the vector layer to the map
-        map.addLayer(vectorLayer);
-    }
+    // Add the vector layer to the map
+    map.addLayer(vectorLayer);
 
-    initialMapDraw();
+    // Get the user's current location
+    /*if ("geolocation" in navigator) {
 
-   var currentLocationLayer; 
+        navigator.geolocation.getCurrentPosition(function (position) {
+            // Update the map view with the user's location
+            var userLocation = ol.proj.fromLonLat([position.coords.longitude, position.coords.latitude]) ?? ol.proj.fromLonLat(46.55947, 15.63293);
+            map.getView().setZoom(14);
 
-    function updateMap(data){
-        //map.getView().setZoom(14);
-
-        // Remove old currentLocation marker
-        map.removeLayer(currentLocationLayer);
-
-        
-        // Convert latitude and longitude arrays to line coordinates
-        var lineCoordinates = [];
-        var ratingOfSections = [];
-        for (var i = 0; i < data.length; i++) {
-            var coordinate = ol.proj.fromLonLat([data[i].longitude, data[i].latitude]);
-            lineCoordinates.push(coordinate);
-            ratingOfSections.push(data[i].rating);
-        }
+            // Convert latitude and longitude arrays to line coordinates
+            var lineCoordinates = [];
+            for (var i = 0; i < latitudes.length; i++) {
+                var coordinate = ol.proj.fromLonLat([longitudes[i], latitudes[i]]);
+                lineCoordinates.push(coordinate);
+            }
 
         console.log(lineCoordinates);
         if(isCentered){
@@ -252,73 +209,73 @@
             source: vectorSource
         });
 
-        // Add the vector layer to the map
-        map.addLayer(vectorLayer);
+            // Add the vector layer to the map
+            map.addLayer(vectorLayer);
 
-                // Get the last coordinate for the current location marker
-       lastCoordinate = lineCoordinates[lineCoordinates.length - 1];
 
-        // Create a point feature for the current location marker
-        var currentLocationMarker = new ol.Feature({
-            geometry: new ol.geom.Point(lastCoordinate),
-        });
+            //TODO FIX NOT SHOWING THE LAST SECTION IDK WHY
 
-        // Create a style for the current location marker
-        var currentLocationStyle = new ol.style.Style({
-            image: new ol.style.Circle({
-                radius: 8,
-                fill: new ol.style.Fill({
-                    color: 'white',
-                }),
-                stroke: new ol.style.Stroke({
-                    color: 'black',
-                    width: 2,
-                }),
-            }),
-        });
+            /*
+            // Create an array to hold the line features
+            var lineFeatures = [];
 
-        // Apply the style to the current location marker feature
-        currentLocationMarker.setStyle(currentLocationStyle);
+            for (var i = 0; i < lineCoordinates.length; i++) {
+                console.log('i:', i);
+                console.log('lineCoordinates[i]:', lineCoordinates[i]);
+                
+                if (i < lineCoordinates.length - 1) {
+                    // Create a line feature for each line segment
+                    var lineFeature = new ol.Feature({
+                        geometry: new ol.geom.LineString([
+                            lineCoordinates[i],
+                            lineCoordinates[i + 1]
+                        ])
+                    });
 
-        // Create a vector source and layer for the current location marker
-        var currentLocationSource = new ol.source.Vector({
-            features: [currentLocationMarker],
-        });
+                    // Create a style for the line feature based on the rating
+                    var rating = ratingOfSections[i];
+                    var color;
+                    if (rating >= 0.66) {
+                        color = 'rgb(0, 255, 0)'; // Green
+                    } else if (rating >= 0.33) {
+                        color = 'rgb(255, 255, 0)'; // Yellow
+                    } else {
+                        color = 'rgb(255, 0, 0)'; // Red
+                    }
 
-        currentLocationLayer = new ol.layer.Vector({
-            source: currentLocationSource,
-        });
+                    var lineStyle = new ol.style.Style({
+                        stroke: new ol.style.Stroke({
+                            color: color,
+                            width: 2
+                        })
+                    });
 
-        
+                    // Apply the style to the line feature
+                    lineFeature.setStyle(lineStyle);
 
-        // Add the current location marker layer to the map
-        map.addLayer(currentLocationLayer); 
-    }
-
-    //updateMap();
-
-     function fetchDataAndUpdateMap() {
-    // Retrieve the ID from the URL
-        var id = window.location.pathname.split('/').pop();
-
-        // Make an AJAX request to fetch new data from the server
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'json/' + id, true); // Modify the URL to match your server-side endpoint
-        xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                console.log(xhr.responseText); // Log the response text
-                var newData = JSON.parse(xhr.responseText);
-                updateMap(newData);
-            } else {
-            console.error('Failed to fetch new data');
+                    // Add the line feature to the array
+                    lineFeatures.push(lineFeature);
+                }
             }
-        }
-        };
-        xhr.send();
-  }
 
-  // Example of updating the map with new data every 5 seconds
-  setInterval(fetchDataAndUpdateMap, 1000);
-    
+            // Create a vector source and layer using the line features
+            var vectorSource = new ol.source.Vector({
+                features: lineFeatures
+            });
+
+            var vectorLayer = new ol.layer.Vector({
+                source: vectorSource
+            });
+
+            // Add the vector layer to the map
+            map.addLayer(vectorLayer);
+
+
+        },
+        function(error) {
+                // Handle geolocation error
+                console.error('Error getting geolocation:', error);
+            });
+
+    }*/
 </script>

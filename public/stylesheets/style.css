@@ -28,6 +28,22 @@ a {
   stroke-width: 4px;
 }
 
+.custom-button {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.current-location-marker {
+  fill: white;
+  stroke: black;
+  stroke-width: 2px;
+}
+
 .carRides-table {
   border-collapse: collapse;
   width: 100%;
