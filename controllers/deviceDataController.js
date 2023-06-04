@@ -14,15 +14,16 @@ module.exports = {
      */
     list: async function (req, res) {
         try {
-            const deviceDatas = await DevicedataModel.find().populate('user');
-            return res.render('deviceData/list', { deviceDatas });
+          const deviceDatas = await DevicedataModel.find().populate('user');
+          const reversedDeviceDatas = deviceDatas.reverse();
+          return res.render('deviceData/list', { deviceDatas: reversedDeviceDatas });
         } catch (err) {
-            return res.status(500).json({
-                message: 'Error when getting deviceData.',
-                error: err
-            });
+          return res.status(500).json({
+            message: 'Error when getting deviceData.',
+            error: err
+          });
         }
-    },
+      },
 
     /**
      * deviceDataController.show()
