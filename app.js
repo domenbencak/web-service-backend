@@ -15,8 +15,6 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 var app = express();
 
-
-// Create a function to set up the server and WebSocket logic
 function setUpServer() {
   return new Promise(function (resolve, reject) {
     var server = app.listen(3000, function () {
