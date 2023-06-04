@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var WebSocket = require('ws');
+const axios = require('axios'); // axios is used for python integration
 
 // vključimo mongoose in ga povežemo z MongoDB
 var mongoose = require('mongoose');
@@ -66,6 +67,7 @@ var wss, tt = setUpServer()
     var deviceDataRouter = require('./routes/deviceDataRoutes');
     var carRideRouter = require('./routes/carRideRoutes');
     var carRideRatingRouter = require('./routes/carRideRatingRoutes');
+    var pythonRouter = require('./routes/pythonRoutes');
 
     //web socket logic
     /*var server = app.listen(3000, function() {
@@ -124,6 +126,7 @@ var wss, tt = setUpServer()
     app.use('/deviceData', deviceDataRouter);
     app.use('/carRide', carRideRouter);
     app.use('/carRideRating', carRideRatingRouter);
+    app.use('/python', pythonRouter);
 
     app.use(express.static(path.join(__dirname, 'public')));
     app.use(express.static(__dirname));
