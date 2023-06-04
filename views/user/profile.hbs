@@ -13,7 +13,24 @@
         }
 
         /* Add straight border */
+        .rounded-form-container {
+            display: grid;
+            grid-template-rows: auto auto;
+            gap: 20px;
+        }
+
         .rounded-form {
+            border: 2px solid #cccccc;
+            border-radius: 0;
+            padding: 40px;
+            background-color: #ffffff;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sdn-rounded-from{
             border: 2px solid #cccccc;
             border-radius: 0;
             padding: 40px;
@@ -75,6 +92,7 @@
 </head>
 
 <body>
+  <div class="rounded-form-container">
     <div class="rounded-form">
         <div class="icon-svg">
             <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none"
@@ -105,8 +123,10 @@
                 </td>
             </tr>
         </table>
+    </div>
 
-        <h2>Your Car Rides:</h2>
+    <div class="rounded-form">
+        <h2 class="bold-title">VOŽNJE:</h2>
         {{#if carRides.length}}
         <table class="carRides-table">
             <thead>
@@ -154,13 +174,14 @@
             </tbody>
         </table>
         {{else}}
-        <p class="no-carRides">No car rides available yet.</p>
+        <p class="no-carRides">Vožnje še niso na voljo.</p>
         {{/if}}
 
         <form action="/carRide" method="POST" class="carRide-button">
-            <button>Start carRide</button>
+            <button>ZAČNI VOŽNJO</button>
         </form>
     </div>
+  </div>
 </body>
 
 </html>
