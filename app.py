@@ -1,13 +1,9 @@
 from flask import Flask, request, jsonify
 import base64
-import logging
 import io
 from PIL import Image
-import cv2
 import os
-import time
 from deepface import DeepFace
-import numpy as np
 
 app = Flask(__name__)
 
