@@ -6,7 +6,7 @@ router.post('/checkFace', async (req, res) => {
     try {
       console.log('Received request for route:', req.originalUrl); // Log the received route
 
-      const response = await axios.post('http://127.0.0.1:5000/checkFace', req.body);
+      const response = await axios.post('http://flask:5000/checkFace', req.body);
       res.json(response.data);
     } catch (error) {
       console.error('Error:', error.message);
@@ -20,7 +20,7 @@ router.post('/checkFace', async (req, res) => {
       const { image, username } = req.body;
   
       // Send the image data to the Python server
-      const response = await axios.post('http://127.0.0.1:5000/createFace', { image, username });
+      const response = await axios.post('http://flask:5000/createFace', { image, username });
   
       res.json(response.data);
     } catch (error) {
