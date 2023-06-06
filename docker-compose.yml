@@ -11,17 +11,6 @@ services:
     networks:
       - my-network
 
-  flask:
-    build:
-      context: .
-      dockerfile: flask_docker/Dockerfile
-    ports:
-      - 5000:5000
-    depends_on:
-      - mongo
-    networks:
-      - my-network
-
   mongo:
     image: mongo
     restart: always
