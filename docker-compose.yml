@@ -8,3 +8,28 @@ services:
         - none  # Disable cache for this service
     ports:
       - 3001:3001
+    depends_on:
+      - mongodb
+    networks:
+      - my-network
+  flask:
+    build:
+      context: .
+      dockerfile: flask_docker/Dockerfile
+      cache_from:
+        - none  # Disable cache for this service
+    ports:
+      - 5000:5000
+    depends_on:
+      - mongodb
+    networks:
+      - my-network
+  mongodb:
+    image: mongo
+    ports:
+      - 27018:27017
+    networks:
+      - my-network
+networks:
+  my-network:
+    driver: bridge
