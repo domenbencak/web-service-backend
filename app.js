@@ -3,14 +3,32 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var waitOn = require('wait-on');
 
 // vključimo mongoose in ga povežemo z MongoDB
 var mongoose = require('mongoose');
 var mongoDB = "mongodb://mongodb:27017/RAI-projekt"; // Updated connection URL
-mongoose.connect(mongoDB, { useNewUrlParser: true });
-mongoose.Promise = global.Promise;
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+// Wait for MongoDB to be ready before connecting
+waitOn({
+  resources: [mongoDB],
+  timeout: 60000, // Maximum wait time in milliseconds
+  interval: 1000, // Polling interval in milliseconds
+}, function (err) {
+  if (err) {
+    console.error('Error waiting for MongoDB:', err);
+    return;
+  }
+
+  // MongoDB is ready, connect to it
+  mongoose.connect(mongoDB, { useNewUrlParser: true })
+    .then(() => {
+      console.log('Connected to MongoDB');
+    })
+    .catch((error) => {
+      console.error('Error connecting to MongoDB:', error);
+    });
+});
 
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/userRoutes');
