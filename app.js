@@ -6,8 +6,8 @@ var logger = require('morgan');
 
 // vključimo mongoose in ga povežemo z MongoDB
 var mongoose = require('mongoose');
-var mongoDB = "mongodb://127.0.0.1/RAI-projekt";
-mongoose.connect(mongoDB);
+var mongoDB = "mongodb://mongodb/RAI-projekt"; // Updated connection URL
+mongoose.connect(mongoDB, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
