@@ -4,13 +4,17 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-// vključimo mongoose in ga povežemo z MongoDB
 var mongoose = require('mongoose');
 var mongoDB = "mongodb://mongodb/RAI-projekt";
-mongoose.connect(mongoDB);
-mongoose.Promise = global.Promise;
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+var delayInSeconds = 3;
+
+setTimeout(() => {
+  mongoose.connect(mongoDB);
+  mongoose.Promise = global.Promise;
+  var db = mongoose.connection;
+  db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+}, delayInSeconds * 1000);
+
 
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/userRoutes');

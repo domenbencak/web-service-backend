@@ -1,5 +1,11 @@
 version: '3'
 services:
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+    networks:
+      - my-network
   express:
     build:
       context: .
@@ -17,12 +23,6 @@ services:
       dockerfile: flask_docker/Dockerfile
     ports:
       - 5000:5000
-    networks:
-      - my-network
-  mongodb:
-    image: mongo
-    ports:
-      - 27017:27017
     networks:
       - my-network
 networks:
