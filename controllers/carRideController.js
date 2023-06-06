@@ -1,8 +1,6 @@
 var carRideModel = require('../models/carRideModel.js');
 var deviceDataController = require('../controllers/deviceDataController.js');
 const deviceDataModel = require('../models/deviceDataModel.js');
-const { wss } = require('../app.js');
-const { tt } = require('../app.js');
 /**
  * carRideController.js
  *
