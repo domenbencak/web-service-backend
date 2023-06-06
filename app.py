@@ -45,6 +45,8 @@ def find_most_confident_image(given_picture_path, directory_path):
             distance_scores[file] = distance
 
     most_confident_image = min(distance_scores, key=distance_scores.get)
+    if(min(distance_scores, key=distance_scores.get) > 0.38):
+        most_confident_image = "Unknown"
     return most_confident_image
 
 def calculate_confidence(img1_path, img2_path):
