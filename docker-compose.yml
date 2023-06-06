@@ -4,7 +4,8 @@ services:
     build:
       context: .
       dockerfile: express_docker/Dockerfile
-      cache_from: none  # Disable cache for this service
+      cache_from:
+        - none  # Disable cache for this service
     ports:
       - 3001:3001
     depends_on:
@@ -15,7 +16,8 @@ services:
     build:
       context: .
       dockerfile: flask_docker/Dockerfile
-      cache_from: none  # Disable cache for this service
+      cache_from:
+        - none  # Disable cache for this service
     ports:
       - 5000:5000
     depends_on:
