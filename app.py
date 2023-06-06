@@ -26,6 +26,7 @@ def hello():
     else:
         return {'message': 'No image received!'}"""
 
+#changed something so I can commit everything to a new branch
 directory = "images"  # Directory where images will be saved
 
 if not os.path.exists(directory):
