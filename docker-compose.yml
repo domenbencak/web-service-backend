@@ -16,8 +16,6 @@ services:
       dockerfile: flask_docker/Dockerfile
     ports:
       - 5000:5000
-    depends_on:
-      - mongodb
     networks:
       - my-network
   mongodb:
