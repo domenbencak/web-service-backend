@@ -6,9 +6,29 @@ services:
       dockerfile: express_docker/Dockerfile
     ports:
       - 3001:3001
+    depends_on:
+      - mongo
+    networks:
+      - my-network
+
   flask:
     build:
       context: .
       dockerfile: flask_docker/Dockerfile
     ports:
       - 5000:5000
+    depends_on:
+      - mongo
+    networks:
+      - my-network
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    networks:
+      - my-network
+
+networks:
+  my-network:
