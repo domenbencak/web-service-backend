@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-const { app } = require('../app.js');
+var app = require('../app');
 var debug = require('debug')('web-service-backend:server');
 var http = require('http');
 
