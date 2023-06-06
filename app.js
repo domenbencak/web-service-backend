@@ -4,17 +4,29 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+setTimeout(function() {
+  console.log("After 3 seconds");
+}, 3000);
+
+// vključimo mongoose in ga povežemo z MongoDB
 var mongoose = require('mongoose');
 var mongoDB = "mongodb://mongodb/RAI-projekt";
-var delayInSeconds = 3;
-
-setTimeout(() => {
-  mongoose.connect(mongoDB);
-  mongoose.Promise = global.Promise;
-  var db = mongoose.connection;
-  db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-}, delayInSeconds * 1000);
-
+setTimeout(function() {
+  console.log("After 3 seconds");
+}, 3000);
+mongoose.connect(mongoDB);
+setTimeout(function() {
+  console.log("After 3 seconds");
+}, 3000);
+mongoose.Promise = global.Promise;
+setTimeout(function() {
+  console.log("After 3 seconds");
+}, 3000);
+var db = mongoose.connection;
+setTimeout(function() {
+  console.log("After 3 seconds");
+}, 3000);
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/userRoutes');
