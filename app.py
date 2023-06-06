@@ -29,70 +29,51 @@ def hello():
 #changed something so I can commit everything to a new branch
 directory = "images"  # Directory where images will be saved
 
-if not os.path.exists(directory):
-    os.makedirs(directory)
-    print(f"Directory '{directory}' created.")
-
-reference_imgs = {}
-for directory_name in os.listdir(directory):
-    folder_path = os.path.join(directory, directory_name)
-    if os.path.isdir(folder_path):
-        image_files = [file for file in os.listdir(folder_path) if file.lower().endswith((".jpg", ".jpeg", ".png"))]
-        reference_imgs[directory_name.capitalize()] = [cv2.imread(os.path.join(folder_path, file)) for file in image_files]
-
-def save_frame(frame, person, directory):
-    folder_path = os.path.join(directory, person.lower())
-    if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
-
-    counter = len(os.listdir(folder_path)) + 1
-    filename = f"{person.capitalize()}_{counter}.jpg"  # Save with capitalized person's name
-    file_path = os.path.join(folder_path, filename)
-    cv2.imwrite(file_path, frame)
-    print(f"Saved frame for {person} in {file_path}")
-
-def compare_images(frame):
-    recognized_person = "Unknown"
-    try:
-        for person, images in reference_imgs.items():
-            for reference_img in images:
-                if DeepFace.verify(frame, reference_img.copy())['verified']:
-                    recognized_person = person
-                    save_frame(frame, person, directory)  # Save the recognized frame
-                    break
-            if recognized_person != "Unknown":
-                break
-    except ValueError:
-        pass
-    return recognized_person
-
 def save_image(image, filename):
     file_path = os.path.join(directory, filename)
     image.save(file_path)
     print(f"Image saved at {file_path}")
 
-def update_reference_images():
-    reference_imgs.clear()
-    for directory_name in os.listdir(directory):
-        folder_path = os.path.join(directory, directory_name)
-        if os.path.isdir(folder_path):
-            image_files = [file for file in os.listdir(folder_path) if file.lower().endswith((".jpg", ".jpeg", ".png"))]
-            reference_imgs[directory_name.capitalize()] = [cv2.imread(os.path.join(folder_path, file)) for file in image_files]
+def find_most_confident_image(given_picture_path, directory_path):
+    distance_scores = {}
+
+    for root, dirs, files in os.walk(directory_path):
+        for file in files:
+            image_path = os.path.join(root, file)
+
+            distance = calculate_confidence(given_picture_path, image_path)
+            distance_scores[file] = distance
+
+    most_confident_image = min(distance_scores, key=distance_scores.get)
+    return most_confident_image
+
+def calculate_confidence(img1_path, img2_path):
+    result = DeepFace.verify(img1_path, img2_path)
+    distance = result['distance']
+    print(f"{img2_path} distance is {distance}")
+    return distance
 
 @app.route('/checkFace', methods=['POST'])
 def hello():
-    update_reference_images()
     #app.logger.debug('Request JSON: %s', request.get_json())
     if 'image' in request.get_json():
         image_data = request.get_json()['image']
         image_bytes = base64.b64decode(image_data)
         image = Image.open(io.BytesIO(image_bytes))
 
-        cv_image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+        # Save the image to a temporary file
+        temp_image_path = "temp_image.png"
+        image.save(temp_image_path)
 
-        recognized_person = compare_images(cv_image)
+        most = find_most_confident_image(temp_image_path, "images")
+
+        os.remove(temp_image_path)
+
+        #cv_image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+
+        #recognized_person = compare_images(cv_image)
         
-        return jsonify({'recognized_person': recognized_person})
+        return jsonify({'recognized_person': most})
     else:
         return jsonify({'message': 'No image received!'})
 
@@ -104,7 +85,10 @@ def create_face():
         image = Image.open(io.BytesIO(image_bytes))
 
         person = request.get_json()['username']
-        folder_path = os.path.join(directory, person.lower())
+
+        save_image(image, f"{person}.jpg")
+
+        """folder_path = os.path.join(directory, person.lower())
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
 
@@ -112,9 +96,7 @@ def create_face():
         filename = f"{person.capitalize()}_{counter}.jpg" 
 
         file_path = os.path.join(folder_path, filename)
-        image.save(file_path)
-
-        update_reference_images()
+        image.save(file_path)"""
 
         return jsonify({'message': 'Image saved successfully'})
     else:
