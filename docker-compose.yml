@@ -21,7 +21,7 @@ services:
   mongodb:
     image: mongo
     ports:
-      - 27017:27017
+      - 27018:27017
     networks:
       - my-network
 networks:
