@@ -4,6 +4,7 @@ services:
     build:
       context: .
       dockerfile: express_docker/Dockerfile
+    command: sh -c "dockerize -wait tcp://mongodb:27017 -timeout 60s && node app.js"
     ports:
       - 3001:3001
     depends_on:
