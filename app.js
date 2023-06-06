@@ -20,8 +20,8 @@ var app = express();
 // Create a function to set up the server and WebSocket logic
 function setUpServer() {
   return new Promise(function (resolve, reject) {
-    var server = app.listen(3001, function () {
-      console.log('Server listening on port 3001');
+    var server = app.listen(3000, function () {
+      console.log('Server listening on port 3000');
       var wss = new WebSocket.Server({ server });
 
       var connectedClients = [];
