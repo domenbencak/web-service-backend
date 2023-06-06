@@ -16,6 +16,7 @@ router.post('/checkFace', async (req, res) => {
 
   router.post('/createFace', async (req, res) => {
     try {
+      console.log('Received request for route:', req.originalUrl); // Log the received route
       const { image, username } = req.body;
   
       // Send the image data to the Python server
